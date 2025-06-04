@@ -3,27 +3,27 @@
         <h1 class="fw-bold mb-0 fs-2">Cadastro</h1>
     </div>
     <div class="modal-body p-5 pt-0">
-        <form class="">
+        <form action="" class="">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control rounded-3" id="floatingInputUser" placeholder="Nome de Usuário">
+                <input type="text" class="form-control rounded-3" id="floatingInputUser" placeholder="Nome de Usuário" required>
                 <label for="floatingInputUser">
                     User
                 </label>
             </div>
             <div class="form-floating mb-3">
-                <input type="email" class="form-control rounded-3" id="floatingInputEmail" placeholder="name@example.com">
+                <input type="email" class="form-control rounded-3" id="floatingInputEmail" placeholder="name@example.com" required>
                 <label for="floatingInputEmail">
                     Email
                 </label>
             </div>
             <div class="form-floating mb-3">
-                <input type="date" class="form-control rounded-3" id="floatingInputDate">
+                <input type="date" class="form-control rounded-3" id="floatingInputDate" required>
                 <label for="floatingInputDate">
                     Data de Nascimento
                 </label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control rounded-3" id="floatingPasswordConfirm" placeholder="Confirmar senha">
+                <input type="password" class="form-control rounded-3" id="floatingPasswordConfirm" placeholder="Confirmar senha" required>
                 <label for="floatingPasswordConfirm">
                     Confirmar senha
                 </label>
@@ -34,7 +34,7 @@
                     Senha
                 </label>
             </div>
-            <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
+            <button id="btn-criar-conta" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
                 Criar conta
             </button>
             <hr class="my-4">

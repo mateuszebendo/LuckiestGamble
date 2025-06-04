@@ -36,11 +36,20 @@ public class UserController extends HttpServlet {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         } else if("POST".equalsIgnoreCase(httpMethod)){
+            if(action.equals("/cadastro")){
+                cadastrarUsuario(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            }
         }
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login-page/login.jsp");
         view.forward(request, response);
+    }
+
+    private void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
     }
 }

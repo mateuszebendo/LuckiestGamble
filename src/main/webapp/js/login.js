@@ -9,3 +9,7 @@ $("#btn-login").click(function (event) {
     $("#form-cadastro").hide();
     $("#form-login").show();
 });
+
+$("#btn-criar-conta").click(function (event) {
+
+})
