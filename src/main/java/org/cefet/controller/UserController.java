@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.cefet.dtos.CreateUsuarioDto;
 
 import java.io.IOException;
 
@@ -50,6 +51,12 @@ public class UserController extends HttpServlet {
     }
 
     private void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CreateUsuarioDto usuarioDto = new CreateUsuarioDto();
+
+        String nome = request.getParameter("nome");
+        String email = request.getParameter("email");
+        String senha = request.getParameter("senha");
+        String dataNascimentoStr = request.getParameter("dataNascimento");
 
     }
 }

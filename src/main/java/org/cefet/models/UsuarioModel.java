@@ -10,7 +10,7 @@ public class UsuarioModel extends BaseModel {
     private String Nome;
     private String Senha;
     private Date DataNascimento;
-    private TipoUsuario TipoUsuario;
+    private TipoUsuario TipoUsuario = org.cefet.enums.TipoUsuario.COMUM;
     private double Saldo;
 
     public UsuarioModel(long usuarioId, String nome, String senha, Date dataNascimento, TipoUsuario tipoUsuario, double saldo) {
