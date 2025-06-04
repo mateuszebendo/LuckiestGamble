@@ -11,6 +11,8 @@ import org.cefet.dtos.CreateUsuarioDto;
 import org.cefet.services.UsuarioService;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @WebServlet(name="UserController", urlPatterns = { "/app/usuario", "/app/usuario/*"})
@@ -71,9 +73,11 @@ public class UserController extends HttpServlet {
         String senha = request.getParameter("senhaPrincipal");
         String dataNascimentoStr = request.getParameter("dataNascimento");
 
-        CreateUsuarioDto createUsuarioDto = new CreateUsuarioDto(nome, email, senha, new Date(dataNascimentoStr));
-
         try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date dataNascimento = formatter.parse(dataNascimentoStr);
+
+            CreateUsuarioDto createUsuarioDto = new CreateUsuarioDto(nome, email, senha, dataNascimento);
             usuarioService.SaveUsuario(createUsuarioDto);
         } catch (Exception e) {
             var ex = e.getMessage();

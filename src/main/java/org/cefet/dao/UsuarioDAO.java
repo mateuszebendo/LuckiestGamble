@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implements BaseRepository<UsuarioModel, Long> {
 
     public UsuarioDAO(Connection connection) {
-        super("usuarios", "usuario_id");
+        super("usuarios", "UsuarioId");
         this.connection = connection;
     }
 
@@ -51,9 +51,9 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         stmt.setString(paramIndex++, entity.getNome());
         stmt.setString(paramIndex++, entity.getEmail());
         stmt.setString(paramIndex++, entity.getSenha());
-        stmt.setDouble(paramIndex++, entity.getSaldo());
         stmt.setDate(paramIndex++, new java.sql.Date(entity.getDataNascimento().getTime()));
         stmt.setString(paramIndex++, entity.getTipoUsuario().toString());
+        stmt.setDouble(paramIndex++, entity.getSaldo());
 
         if (forUpdate) {
             stmt.setLong(paramIndex, entity.getUsuarioId());

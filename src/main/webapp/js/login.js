@@ -100,22 +100,22 @@ $(document).ready(function() {
             $senhaInput.addClass('is-valid');
         }
 
-        // if ($confirmarSenhaInput.val().trim() === '') {
-        //     $confirmarSenhaInput.addClass('is-invalid');
-        //     $erroConfirmarSenhaSpan.text('A confirmação de senha é obrigatória.');
-        //     isValid = false;
-        // } else if ($senhaInput.val().trim() !== $confirmarSenhaInput.val().trim()) {
-        //     $confirmarSenhaInput.addClass('is-invalid');
-        //     $erroConfirmarSenhaSpan.text('As senhas não coincidem.');
-        //     isValid = false;
-        // } else {
-        //     $confirmarSenhaInput.addClass('is-valid');
-        // }
-
-
-        if (!isValid) {
-            event.preventDefault();
+        if ($confirmarSenhaInput.val().trim() === '') {
+            $confirmarSenhaInput.addClass('is-invalid');
+            $erroConfirmarSenhaSpan.text('A confirmação de senha é obrigatória.');
+            isValid = false;
+        } else if ($senhaInput.val().trim() !== $confirmarSenhaInput.val().trim()) {
+            $confirmarSenhaInput.addClass('is-invalid');
+            $erroConfirmarSenhaSpan.text('As senhas não coincidem.');
+            isValid = false;
+        } else {
+            $confirmarSenhaInput.addClass('is-valid');
         }
+
+
+        // if (!isValid) {
+        //     event.preventDefault();
+        // }
     });
 
     function validarEmailFormato(email) {

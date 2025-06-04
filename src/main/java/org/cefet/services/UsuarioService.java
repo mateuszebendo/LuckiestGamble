@@ -4,6 +4,7 @@ import org.cefet.config.ConnectionFactory;
 import org.cefet.dao.UsuarioDAO;
 import org.cefet.dtos.CreateUsuarioDto;
 import org.cefet.dtos.ResponseUsuarioDto;
+import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.sql.SQLException;
@@ -22,6 +23,8 @@ public class UsuarioService {
         usuario.setEmail(dto.getEmail());
         usuario.setSenha(dto.getSenha());
         usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setSaldo(0);
+        usuario.setTipoUsuario(TipoUsuario.COMUM);
 
         var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
 

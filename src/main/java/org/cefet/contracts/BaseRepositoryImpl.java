@@ -2,6 +2,7 @@ package org.cefet.contracts;
 
 import org.cefet.contracts.base.BaseRepository;
 import org.cefet.models.base.BaseModel;
+import org.cefet.utils.StringConverter;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -46,7 +47,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
                 Field[] fields = entityClass.getDeclaredFields();
                 for (Field field : fields) {
                     if (field.getName().equalsIgnoreCase(idColumnName)) continue;
-                    sql.append(field.getName()).append(",");
+                    sql.append(StringConverter.pascalToSnakeCase(field.getName())).append(",");
                     values.append("?,");
                     columns.add(field.getName());
                 }
