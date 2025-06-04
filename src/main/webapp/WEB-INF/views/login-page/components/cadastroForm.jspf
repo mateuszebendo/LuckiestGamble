@@ -48,7 +48,7 @@
                 Criar conta
             </button>
             <hr class="my-4">
-            <h1 class="fw-bold mb-0 fs-2">Ou caso possua uma conta</h1>
+            <h1 class="fw-bold mb-3 fs-2">Ou caso possua uma conta</h1>
             <button id="btn-login" class="w-100 py-2 mb-2 btn btn-outline-secondary rounded-3" type="submit">
                 Logar
             </button>

@@ -5,7 +5,9 @@
 
 <%@include file="/WEB-INF/shared/pageConfigHeader.jspf"%>
 
-<%@include file="components/loginForm.jspf"%>
-<%@include file="components/cadastroForm.jspf"%>
+<main class="d-flex align-items-center justify-content-center min-vh-100">
+    <%@include file="components/loginForm.jspf"%>
+    <%@include file="components/cadastroForm.jspf"%>
+</main>
 
 <%@include file="/WEB-INF/shared/pageConfigFooter.jspf"%>
