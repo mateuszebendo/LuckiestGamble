@@ -1,9 +1,11 @@
-$("#btn-login").click(function () {
+$("#btn-cadastro").click(function (event) {
+    event.preventDefault()
     $("#form-cadastro").show();
     $("#form-login").hide();
 });
 
-$("#btn-cadastro").click(function () {
+$("#btn-login").click(function (event) {
+    event.preventDefault()
     $("#form-cadastro").hide();
     $("#form-login").show();
 });

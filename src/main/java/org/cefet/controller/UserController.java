@@ -40,7 +40,7 @@ public class UserController extends HttpServlet {
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login-page/login.jsp");
         view.forward(request, response);
     }
 }
