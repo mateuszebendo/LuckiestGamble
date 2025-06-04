@@ -33,30 +33,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
     protected abstract T mapResultSetToObject(ResultSet rs) throws SQLException;
     protected abstract ID getIdValue(T entity);
     protected abstract void setIdValue(T entity, ID id);
-
-    protected void setStatementParams(PreparedStatement stmt, T entity, boolean forUpdate) throws SQLException {
-        Field[] fields = entity.getClass().getDeclaredFields();
-        int parameterIndex = 1;
-
-        for (Field field : fields) {
-            if (field.getName().equalsIgnoreCase(idColumnName)) {
-                continue;
-            }
-
-            try {
-                field.setAccessible(true);
-                Object value = field.get(entity);
-                stmt.setObject(parameterIndex, value);
-                parameterIndex++;
-            } catch (IllegalAccessException e) {
-                throw new SQLException("Erro ao acessar campo da entidade: " + field.getName(), e);
-            }
-        }
-
-        if (forUpdate) {
-            stmt.setObject(parameterIndex, getIdValue(entity));
-        }
-    }
+    protected abstract void setStatementParams(PreparedStatement stmt, T entity, boolean forUpdate) throws SQLException;
 
     @Override
     public T save(T entity) throws SQLException {

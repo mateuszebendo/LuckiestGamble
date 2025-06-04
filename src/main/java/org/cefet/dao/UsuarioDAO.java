@@ -1,41 +1,63 @@
 package org.cefet.dao;
 
 import org.cefet.contracts.BaseRepositoryImpl;
-import org.cefet.models.base.BaseModel;
-
-import java.io.Serializable;
+import org.cefet.contracts.base.BaseRepository;
+import org.cefet.enums.TipoUsuario;
+import org.cefet.models.UsuarioModel;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Optional;
+import java.sql.PreparedStatement;
 
-public class UsuarioDAO extends BaseRepositoryImpl {
+public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implements BaseRepository<UsuarioModel, Long> {
 
-    public UsuarioDAO(String tableName, String idColumnName) {
-        super("usuarios", "UsuarioId");
+    public UsuarioDAO(Connection connection) {
+        super("usuarios", "usuario_id");
+        this.connection = connection;
+    }
+
+    public UsuarioDAO(String tableName, String idColumnName, Connection connection) {
+        super(tableName, idColumnName);
+        this.connection = connection;
     }
 
     @Override
-    protected BaseModel mapResultSetToObject(ResultSet rs) throws SQLException {
-        return null;
+    protected UsuarioModel mapResultSetToObject(ResultSet rs) throws SQLException {
+        UsuarioModel usuario = new UsuarioModel();
+        usuario.setUsuarioId(rs.getLong("usuario_id"));
+        usuario.setNome(rs.getString("nome"));
+        usuario.setEmail(rs.getString("email"));
+        usuario.setSenha(rs.getString("senha"));
+        usuario.setSaldo(rs.getDouble("saldo"));
+        usuario.setDataNascimento(rs.getDate("data_nascimento"));
+        usuario.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
+        return usuario;
     }
 
     @Override
-    protected Serializable getIdValue(BaseModel entity) {
-        return null;
+    protected Long getIdValue(UsuarioModel usuarioModel) {
+        return usuarioModel.getUsuarioId();
     }
 
     @Override
-    protected void setIdValue(BaseModel entity, Serializable serializable) {
-
+    protected void setIdValue(UsuarioModel entity, Long id) {
+        entity.setUsuarioId(id);
     }
 
     @Override
-    public Optional findById(Object o) throws SQLException {
-        return Optional.empty();
+    protected void setStatementParams(PreparedStatement stmt, UsuarioModel entity, boolean forUpdate) throws SQLException {
+        int paramIndex = 1;
+
+        stmt.setString(paramIndex++, entity.getNome());
+        stmt.setString(paramIndex++, entity.getEmail());
+        stmt.setString(paramIndex++, entity.getSenha());
+        stmt.setDouble(paramIndex++, entity.getSaldo());
+        stmt.setDate(paramIndex++, new java.sql.Date(entity.getDataNascimento().getTime()));
+        stmt.setString(paramIndex++, entity.getTipoUsuario().toString());
+
+        if (forUpdate) {
+            stmt.setLong(paramIndex, entity.getUsuarioId());
+        }
     }
 
-    @Override
-    public void deleteById(Object o) throws SQLException {
-
-    }
 }
