@@ -2,6 +2,7 @@ package org.cefet.dao;
 
 import org.cefet.contracts.BaseRepositoryImpl;
 import org.cefet.contracts.base.BaseRepository;
+import org.cefet.dtos.usuario.ResponseUsuarioDto;
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 import java.sql.Connection;
@@ -19,6 +20,23 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
     public UsuarioDAO(String tableName, String idColumnName, Connection connection) {
         super(tableName, idColumnName);
         this.connection = connection;
+    }
+
+    public UsuarioModel login(String nome, String senha) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT * FROM usuarios WHERE nome = ? AND senha = ?");
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            stmt.setString(1, nome);
+            stmt.setString(2, senha);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                UsuarioModel usuario = mapResultSetToObject(rs);
+                return usuario;
+            }
+        }
+
+        return null;
     }
 
     @Override

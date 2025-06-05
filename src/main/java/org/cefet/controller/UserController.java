@@ -6,12 +6,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.cefet.dao.UsuarioDAO;
-import org.cefet.dtos.CreateUsuarioDto;
+import org.cefet.dtos.usuario.CreateUsuarioDto;
+import org.cefet.dtos.usuario.LoginUsuarioDto;
 import org.cefet.services.UsuarioService;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -49,22 +48,42 @@ public class UserController extends HttpServlet {
 
         if("GET".equalsIgnoreCase(httpMethod)){
             if(action.equals("/login")){
-                login(request, response);
+                getPage(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         } else if("POST".equalsIgnoreCase(httpMethod)){
             if(action.equals("/cadastro")){
                 cadastrarUsuario(request, response);
-            } else {
+            } else if(action.equals("/login")) {
+                login(request, response);
+            }  else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
         }
     }
 
-    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void getPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login-page/login.jsp");
         view.forward(request, response);
+    }
+
+    private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String nome = request.getParameter("nome");
+        String senha = request.getParameter("senha");
+
+        LoginUsuarioDto loginUsuarioDto = new LoginUsuarioDto(nome, senha);
+
+        try {
+            var usuarioResponse = usuarioService.login(loginUsuarioDto);
+            request.setAttribute("usuario", usuarioResponse);
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/home-page/home.jsp");
+            view.forward(request, response);
+        } catch (Exception e) {
+            request.setAttribute("mensagemErro", e.getMessage());
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login-page/login.jsp");
+            view.forward(request, response);
+        }
     }
 
     private void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -78,10 +97,14 @@ public class UserController extends HttpServlet {
             Date dataNascimento = formatter.parse(dataNascimentoStr);
 
             CreateUsuarioDto createUsuarioDto = new CreateUsuarioDto(nome, email, senha, dataNascimento);
-            usuarioService.SaveUsuario(createUsuarioDto);
+            usuarioService.saveUsuario(createUsuarioDto);
         } catch (Exception e) {
-            var ex = e.getMessage();
+            request.setAttribute("mensagemErro", e.getMessage());
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login-page/login.jsp");
+            view.forward(request, response);
         }
 
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/login-page/login.jsp");
+        view.forward(request, response);
     }
 }

@@ -3,15 +3,15 @@
         <h1 class="fw-bold mb-0 fs-2">Login</h1>
     </div>
     <div class="modal-body p-5 pt-0">
-        <form class="">
+        <form action="${pageContext.request.contextPath}/app/usuario/login" class="" method="post">
             <div class="form-floating mb-3">
-                <input type="text" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">
+                <input name="nome" type="text" class="form-control rounded-3" id="floatingInput" placeholder="name@example.com">
                 <label for="floatingInput">
                     User
                 </label>
             </div>
             <div class="form-floating mb-3">
-                <input type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password">
+                <input name="senha" type="password" class="form-control rounded-3" id="floatingPassword" placeholder="Password">
                 <label for="floatingPassword">
                     Senha
                 </label>

@@ -1,4 +1,4 @@
-package org.cefet.dtos;
+package org.cefet.dtos.usuario;
 
 import org.cefet.models.UsuarioModel;
 
