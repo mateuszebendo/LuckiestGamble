@@ -2,13 +2,10 @@ package org.cefet.dao;
 
 import org.cefet.contracts.BaseRepositoryImpl;
 import org.cefet.contracts.base.BaseRepository;
-import org.cefet.dtos.usuario.ResponseUsuarioDto;
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.PreparedStatement;
+
+import java.sql.*;
 
 public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implements BaseRepository<UsuarioModel, Long> {
 
@@ -37,6 +34,24 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         }
 
         return null;
+    }
+
+    public UsuarioModel addSaldo(double novoValor, long usuarioId) throws SQLException {
+        StringBuilder sql = new StringBuilder("UPDATE usuarios SET saldo = saldo + ?, data_atualizacao = ? WHERE usuario_id = ?");
+        UsuarioModel usuario;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            stmt.setDouble(1, novoValor);
+            stmt.setDate(2, new java.sql.Date(new java.util.Date().getTime()));
+            stmt.setLong(3, usuarioId);
+
+            stmt.executeUpdate();
+            usuario = findById(usuarioId).orElse(null);
+        } catch (SQLException e) {
+            throw new SQLException(e);
+        }
+
+        return usuario;
     }
 
     @Override

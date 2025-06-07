@@ -46,7 +46,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
             try {
                 Field[] fields = entityClass.getDeclaredFields();
                 for (Field field : fields) {
-                    if (field.getName().equalsIgnoreCase(idColumnName) || field.getType().equals(BaseModel.class)) continue;
+                    if (field.getName().equalsIgnoreCase(idColumnName) || BaseModel.class.isAssignableFrom(field.getType())) continue;
                     sql.append(StringConverter.pascalToSnakeCase(field.getName())).append(",");
                     values.append("?,");
                     columns.add(field.getName());
@@ -84,7 +84,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
 
     @Override
     public Optional<T> findById(ID id) throws SQLException {
-        String sql = "SELECT * FROM " + tableName + " WHERE " + idColumnName + " = ?";
+        String sql = "SELECT * FROM " + tableName + " WHERE " + StringConverter.pascalToSnakeCase(idColumnName) + " = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, id);
             try (ResultSet rs = stmt.executeQuery()) {

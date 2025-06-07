@@ -6,11 +6,7 @@ import org.cefet.models.TransacaoModel;
 import org.cefet.enums.TipoTransacao;
 import org.cefet.enums.StatusTransacao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class TransacaoDAO extends BaseRepositoryImpl<TransacaoModel, Long> implements BaseRepository<TransacaoModel, Long> {
 
@@ -60,14 +56,36 @@ public class TransacaoDAO extends BaseRepositoryImpl<TransacaoModel, Long> imple
     protected void setStatementParams(PreparedStatement stmt, TransacaoModel entity, boolean forUpdate) throws SQLException {
         int paramIndex = 1;
 
-        stmt.setLong(paramIndex++, entity.getUsuarioId());
-        stmt.setString(paramIndex++, entity.getTipoTransacao() != null ? entity.getTipoTransacao().name() : null);
+        stmt.setString(paramIndex++, entity.getTipoTransacao().name());
         stmt.setDouble(paramIndex++, entity.getValor());
-        stmt.setTimestamp(paramIndex++, new Timestamp(entity.getDataHora().getTime()));
-        stmt.setString(paramIndex++, entity.getDescricao());
-        stmt.setString(paramIndex++, entity.getStatus() != null ? entity.getStatus().name() : null);
-        stmt.setTimestamp(paramIndex++, new Timestamp(entity.getDataCriacao().getTime()));
-        stmt.setTimestamp(paramIndex++, new Timestamp(entity.getDataAtualizacao().getTime()));
+
+        if (entity.getDataHora() != null) {
+            stmt.setTimestamp(paramIndex++, new Timestamp(entity.getDataHora().getTime()));
+        } else {
+            stmt.setNull(paramIndex++, Types.TIMESTAMP);
+        }
+
+        if (entity.getDescricao() != null) {
+            stmt.setString(paramIndex++, entity.getDescricao());
+        } else {
+            stmt.setNull(paramIndex++, Types.VARCHAR);
+        }
+
+        stmt.setString(paramIndex++, entity.getStatus().name());
+
+        if (entity.getDataCriacao() != null) {
+            stmt.setTimestamp(paramIndex++, new Timestamp(entity.getDataCriacao().getTime()));
+        } else {
+            stmt.setNull(paramIndex++, Types.TIMESTAMP);
+        }
+
+        if (entity.getDataAtualizacao() != null) {
+            stmt.setTimestamp(paramIndex++, new Timestamp(entity.getDataAtualizacao().getTime()));
+        } else {
+            stmt.setNull(paramIndex++, Types.TIMESTAMP);
+        }
+
+        stmt.setLong(paramIndex++, entity.getUsuarioId());
 
         if (forUpdate) {
             stmt.setLong(paramIndex++, entity.getTransacaoId());

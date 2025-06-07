@@ -3,19 +3,19 @@
 
 <div class="side-bar">
     <ul>
-        <li class="menu-item even-item">
+        <li class="menu-item even-item" onclick="window.location.href = '${contextPath}/app/portal/home';">
             <img src="${contextPath}/svgs/home.svg" alt="Home Icon" class="item-icon"/>
             <p>Home</p>
         </li>
-        <li class="menu-item odd-item">
+        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/jogos';">
             <img src="${contextPath}/svgs/poker.svg" alt="Home Icon" class="item-icon"/>
             <p>Jogos</p>
         </li>
-        <li class="menu-item even-item">
+        <li class="menu-item even-item" onclick="window.location.href = '${contextPath}/app/portal/profile';">
             <img src="${contextPath}/svgs/profile.svg" alt="Home Icon" class="item-icon"/>
             <p>Perfil</p>
         </li>
-        <li class="menu-item odd-item">
+        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/logout';">
             <img src="${contextPath}/svgs/exit.svg" alt="Home Icon" class="item-icon"/>
             <p>Sair</p>
         </li>

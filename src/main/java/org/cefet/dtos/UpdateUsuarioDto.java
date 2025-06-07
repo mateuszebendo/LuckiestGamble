@@ -1,23 +1,23 @@
-package org.cefet.dtos.usuario;
+package org.cefet.dtos;
 
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.util.Date;
 
-public class ResponseUsuarioDto {
+public class UpdateUsuarioDto {
     private Long UsuarioId;
     private String Nome;
     private String Email;
     private String Senha;
     private Date DataNascimento;
-    private TipoUsuario TipoUsuario = org.cefet.enums.TipoUsuario.COMUM;
+    private TipoUsuario TipoUsuario;
     private double Saldo;
 
-    public ResponseUsuarioDto() {
+    public UpdateUsuarioDto() {
     }
 
-    public ResponseUsuarioDto(UsuarioModel usuario) {
+    public UpdateUsuarioDto(UsuarioModel usuario) {
         UsuarioId = usuario.getUsuarioId();
         Nome = usuario.getNome();
         Email = usuario.getEmail();

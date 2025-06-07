@@ -1,13 +1,12 @@
-package org.cefet.models;
+package org.cefet.dtos;
 
-import org.cefet.dtos.CreateTransacaoDto;
 import org.cefet.enums.StatusTransacao;
 import org.cefet.enums.TipoTransacao;
-import org.cefet.models.base.BaseModel;
+import org.cefet.models.TransacaoModel;
 
 import java.util.Date;
 
-public class TransacaoModel extends BaseModel {
+public class ResponseTransacaoDto {
     private Long TransacaoId;
     private TipoTransacao TipoTransacao;
     private Double Valor;
@@ -18,30 +17,22 @@ public class TransacaoModel extends BaseModel {
     private Date DataAtualizacao;
     private long UsuarioId;
 
-    private UsuarioModel Usuario;
+    private ResponseUsuarioDto ResponseUsuario;
 
-    public TransacaoModel() {
+    public ResponseTransacaoDto() {
     }
 
-    public TransacaoModel(CreateTransacaoDto transacao) {
-        TipoTransacao = transacao.getTipoTransacao();
-        Valor = transacao.getValor();
-        Descricao = transacao.getDescricao();
-        Status = transacao.getStatus();
-        UsuarioId = transacao.getUsuarioId();
-    }
-
-    public TransacaoModel(long transacaoId, TipoTransacao tipoTransacao, Double valor, Date dataHora, String descricao, StatusTransacao status, Date dataCriacao, Date dataAtualizacao, long usuarioId, UsuarioModel usuario) {
-        TransacaoId = transacaoId;
-        TipoTransacao = tipoTransacao;
-        Valor = valor;
-        DataHora = dataHora;
-        Descricao = descricao;
-        Status = status;
-        DataCriacao = dataCriacao;
-        DataAtualizacao = dataAtualizacao;
-        UsuarioId = usuarioId;
-        Usuario = usuario;
+    public ResponseTransacaoDto(TransacaoModel transacaoModel) {
+        TransacaoId = transacaoModel.getTransacaoId();
+        TipoTransacao = transacaoModel.getTipoTransacao();
+        Valor = transacaoModel.getValor();
+        DataHora = transacaoModel.getDataHora();
+        Descricao = transacaoModel.getDescricao();
+        Status = transacaoModel.getStatus();
+        DataCriacao = transacaoModel.getDataCriacao();
+        DataAtualizacao = transacaoModel.getDataAtualizacao();
+        UsuarioId = transacaoModel.getUsuarioId();
+        ResponseUsuario = new ResponseUsuarioDto(transacaoModel.getUsuario());
     }
 
     public Long getTransacaoId() {
@@ -116,11 +107,11 @@ public class TransacaoModel extends BaseModel {
         UsuarioId = usuarioId;
     }
 
-    public UsuarioModel getUsuario() {
-        return Usuario;
+    public ResponseUsuarioDto getResponseUsuario() {
+        return ResponseUsuario;
     }
 
-    public void setUsuario(UsuarioModel usuario) {
-        Usuario = usuario;
+    public void setResponseUsuario(ResponseUsuarioDto responseUsuario) {
+        ResponseUsuario = responseUsuario;
     }
 }
