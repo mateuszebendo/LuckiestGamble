@@ -36,7 +36,7 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         return null;
     }
 
-    public UsuarioModel addSaldo(double novoValor, long usuarioId) throws SQLException {
+    public UsuarioModel changeSaldo(double novoValor, long usuarioId) throws SQLException {
         StringBuilder sql = new StringBuilder("UPDATE usuarios SET saldo = saldo + ?, data_atualizacao = ? WHERE usuario_id = ?");
         UsuarioModel usuario;
 

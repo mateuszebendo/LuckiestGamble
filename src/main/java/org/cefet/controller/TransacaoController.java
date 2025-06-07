@@ -43,6 +43,8 @@ public class TransacaoController extends HttpServlet {
         if(httpMethod.equals("POST")) {
             if(action.equals("/deposito")) {
                 depositInAccount(request, response);
+            } else if(action.equals("/saque")) {
+                withdrawalCash(request, response);
             }
         }
     }
@@ -63,6 +65,26 @@ public class TransacaoController extends HttpServlet {
         } catch (Exception e)
         {
             request.setAttribute("message", "Erro ao efetuar o deposito: " + e.getMessage());
+        }
+        request.getRequestDispatcher("/app/portal/profile").forward(request, response);
+    }
+
+    private void withdrawalCash(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Double value = Double.parseDouble(request.getParameter("decreaseAmount"));
+        ResponseUsuarioDto responseUsuarioDto = UserSession.getUsuario(request, response);
+
+        try {
+            CreateTransacaoDto createTransacaoDto = new CreateTransacaoDto();
+            createTransacaoDto.setValor(value);
+            createTransacaoDto.setUsuarioId(responseUsuarioDto.getUsuarioId());
+            ResponseTransacaoDto responseTransacaoDto = transacaoService.withdrawal(createTransacaoDto);
+
+            UserSession.setUsuario(request, responseTransacaoDto.getResponseUsuario());
+            request.setAttribute("transacaoResponse", responseTransacaoDto);
+            request.setAttribute("message", "Saque efetuado com sucesso!");
+        } catch (Exception e)
+        {
+            request.setAttribute("message", "Erro ao efetuar o saque: " + e.getMessage());
         }
         request.getRequestDispatcher("/app/portal/profile").forward(request, response);
     }

@@ -74,9 +74,14 @@ public class PortalController extends HttpServlet {
 
     protected void getProfilePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<String> pageStyles = new ArrayList<>();
+        List<String> pageScripts = new ArrayList<>();
+
         pageStyles.add("profile");
         pageStyles.add("sideBar");
         request.setAttribute("pageStyles", pageStyles);
+
+        pageScripts.add("profile");
+        request.setAttribute("pageScripts", pageScripts);
 
         request.getRequestDispatcher("/WEB-INF/views/profile-page/profile.jsp").forward(request, response);
     }
