@@ -1,23 +1,38 @@
 package org.cefet.dtos.usuario;
 
+import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.util.Date;
 
 public class ResponseUsuarioDto {
+    private Long UsuarioId;
     private String Nome;
     private String Email;
     private String Senha;
     private Date DataNascimento;
+    private TipoUsuario TipoUsuario = org.cefet.enums.TipoUsuario.COMUM;
+    private double Saldo;
 
     public ResponseUsuarioDto() {
     }
 
-    public ResponseUsuarioDto(UsuarioModel usuarioModel) {
-        Nome = usuarioModel.getNome();
-        Email = usuarioModel.getEmail();
-        Senha = usuarioModel.getSenha();
-        DataNascimento = usuarioModel.getDataNascimento();
+    public ResponseUsuarioDto(UsuarioModel usuario) {
+        UsuarioId = usuario.getUsuarioId();
+        Nome = usuario.getNome();
+        Email = usuario.getEmail();
+        Senha = usuario.getSenha();
+        DataNascimento = usuario.getDataNascimento();
+        TipoUsuario = usuario.getTipoUsuario();
+        Saldo = usuario.getSaldo();
+    }
+
+    public Long getUsuarioId() {
+        return UsuarioId;
+    }
+
+    public void setUsuarioId(Long usuarioId) {
+        UsuarioId = usuarioId;
     }
 
     public String getNome() {
@@ -50,5 +65,21 @@ public class ResponseUsuarioDto {
 
     public void setDataNascimento(Date dataNascimento) {
         DataNascimento = dataNascimento;
+    }
+
+    public TipoUsuario getTipoUsuario() {
+        return TipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        TipoUsuario = tipoUsuario;
+    }
+
+    public double getSaldo() {
+        return Saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        Saldo = saldo;
     }
 }

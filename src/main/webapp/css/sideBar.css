@@ -1,5 +1,5 @@
 .side-bar {
-    position: fixed;
+    position: absolute;
     padding: 0;
     left: 0;
     height: 100%;

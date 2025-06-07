@@ -46,7 +46,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
             try {
                 Field[] fields = entityClass.getDeclaredFields();
                 for (Field field : fields) {
-                    if (field.getName().equalsIgnoreCase(idColumnName)) continue;
+                    if (field.getName().equalsIgnoreCase(idColumnName) || field.getType().equals(BaseModel.class)) continue;
                     sql.append(StringConverter.pascalToSnakeCase(field.getName())).append(",");
                     values.append("?,");
                     columns.add(field.getName());

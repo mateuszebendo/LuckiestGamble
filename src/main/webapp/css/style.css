@@ -8,7 +8,7 @@ html {
     width: 100vw;
 }
 
-main, body {
+body {
     width: 100%;
     height: 100%;
 }
@@ -18,4 +18,100 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+}
+
+.default-form {
+    width: 50%;
+    background-color: #222222;
+    border-radius: 16px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 4rem;
+    gap: 0.5rem;
+    box-shadow: 0px 4px 8px white;
+}
+
+.default-form-error-message {
+    font-size: 1rem;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.default-input {
+    width: 100%;
+    padding: 12px 10px;
+    margin-bottom: 25px;
+    border: none;
+    font-size: 1rem;
+    color: #333;
+    background-color: #ffffff;
+    border-radius: 10px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    outline: none;
+}
+
+.default-input:focus{
+    border-bottom: 2px solid #d41818;
+    box-shadow: 0 2px 5px rgb(97, 12, 12);
+}
+
+.default-input::placeholder{
+    color: #999;
+    font-style: italic;
+}
+
+.custom-btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    outline: none;
+}
+
+.button-primary {
+    background-color: #d41818;
+    color: white;
+    box-shadow: 0 4px 8px rgba(227, 13, 16, 0.2);
+}
+
+.button-primary:hover {
+    background-color: #880f0f;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(228, 39, 42, 0.2);
+}
+
+
+.button-primary:active {
+    background-color: #610c0c;
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(227, 13, 16, 0.2);
+}
+
+.button-secondary {
+    background-color: #ffffff;
+    color: #000000;
+    box-shadow: 0 4px 8px rgb(191, 191, 191);
+}
+
+.button-secondary:hover {
+    background-color: #919191;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(76, 76, 76, 0.2);
+}
+
+
+.button-secondary:active {
+    background-color: #555555;
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(71, 71, 71, 0.2);
 }
