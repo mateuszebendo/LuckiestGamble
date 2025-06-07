@@ -1,4 +1,4 @@
-package org.cefet.dtos.usuario;
+package org.cefet.dtos;
 
 public class LoginUsuarioDto {
     private String Usuario;

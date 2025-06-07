@@ -2,9 +2,10 @@ package org.cefet.services;
 
 import org.cefet.config.ConnectionFactory;
 import org.cefet.dao.UsuarioDAO;
-import org.cefet.dtos.usuario.CreateUsuarioDto;
-import org.cefet.dtos.usuario.LoginUsuarioDto;
-import org.cefet.dtos.usuario.ResponseUsuarioDto;
+import org.cefet.dtos.CreateUsuarioDto;
+import org.cefet.dtos.LoginUsuarioDto;
+import org.cefet.dtos.ResponseUsuarioDto;
+import org.cefet.dtos.UpdateUsuarioDto;
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
@@ -36,6 +37,21 @@ public class UsuarioService {
         UsuarioModel usuarioModel = usuarioDAO.login(usuario.getUsuario(), usuario.getSenha());
 
         return new ResponseUsuarioDto(usuarioModel);
+    }
+
+    public ResponseUsuarioDto updateUsuario (UpdateUsuarioDto dto) throws Exception {
+        UsuarioModel usuario = new UsuarioModel();
+        usuario.setUsuarioId(dto.getUsuarioId());
+        usuario.setNome(dto.getNome());
+        usuario.setEmail(dto.getEmail());
+        usuario.setSenha(dto.getSenha());
+        usuario.setDataNascimento(dto.getDataNascimento());
+        usuario.setSaldo(dto.getSaldo());
+        usuario.setTipoUsuario(dto.getTipoUsuario());
+
+        var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
+
+        return usuarioResponse;
     }
 
 }
