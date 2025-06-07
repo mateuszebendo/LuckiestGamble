@@ -1,19 +1,23 @@
-package org.cefet.dtos;
+package org.cefet.dtos.usuario;
+
+import org.cefet.models.UsuarioModel;
 
 import java.util.Date;
 
-public class CreateUsuarioDto {
+public class ResponseUsuarioDto {
     private String Nome;
+    private String Email;
     private String Senha;
     private Date DataNascimento;
 
-    public CreateUsuarioDto() {
+    public ResponseUsuarioDto() {
     }
 
-    public CreateUsuarioDto(String nome, String senha, Date dataNascimento) {
-        Nome = nome;
-        Senha = senha;
-        DataNascimento = dataNascimento;
+    public ResponseUsuarioDto(UsuarioModel usuarioModel) {
+        Nome = usuarioModel.getNome();
+        Email = usuarioModel.getEmail();
+        Senha = usuarioModel.getSenha();
+        DataNascimento = usuarioModel.getDataNascimento();
     }
 
     public String getNome() {
@@ -22,6 +26,14 @@ public class CreateUsuarioDto {
 
     public void setNome(String nome) {
         Nome = nome;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
     }
 
     public String getSenha() {

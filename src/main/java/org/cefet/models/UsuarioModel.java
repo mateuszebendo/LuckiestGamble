@@ -3,31 +3,36 @@ package org.cefet.models;
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.base.BaseModel;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class UsuarioModel extends BaseModel {
-    private long UsuarioId;
+    private Long UsuarioId;
     private String Nome;
+    private String Email;
     private String Senha;
     private Date DataNascimento;
     private TipoUsuario TipoUsuario = org.cefet.enums.TipoUsuario.COMUM;
     private double Saldo;
 
-    public UsuarioModel(long usuarioId, String nome, String senha, Date dataNascimento, TipoUsuario tipoUsuario, double saldo) {
+    public UsuarioModel(Long usuarioId, String nome, String email, String senha, Date dataNascimento, TipoUsuario tipoUsuario, double saldo) {
         UsuarioId = usuarioId;
         Nome = nome;
+        Email = email;
         Senha = senha;
         DataNascimento = dataNascimento;
         TipoUsuario = tipoUsuario;
         Saldo = saldo;
-        setCreatedAt(new Date());
     }
 
-    public long getUsuarioId() {
+    public UsuarioModel() {
+    }
+
+    public Long getUsuarioId() {
         return UsuarioId;
     }
 
-    public void setUsuarioId(long usuarioId) {
+    public void setUsuarioId(Long usuarioId) {
         UsuarioId = usuarioId;
     }
 
@@ -37,6 +42,14 @@ public class UsuarioModel extends BaseModel {
 
     public void setNome(String nome) {
         Nome = nome;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
     }
 
     public String getSenha() {
