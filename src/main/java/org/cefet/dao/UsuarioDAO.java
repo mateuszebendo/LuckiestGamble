@@ -42,6 +42,7 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
     @Override
     protected UsuarioModel mapResultSetToObject(ResultSet rs) throws SQLException {
         UsuarioModel usuario = new UsuarioModel();
+
         usuario.setUsuarioId(rs.getLong("usuario_id"));
         usuario.setNome(rs.getString("nome"));
         usuario.setEmail(rs.getString("email"));
@@ -49,6 +50,7 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         usuario.setSaldo(rs.getDouble("saldo"));
         usuario.setDataNascimento(rs.getDate("data_nascimento"));
         usuario.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
+
         return usuario;
     }
 

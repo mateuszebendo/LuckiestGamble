@@ -5,15 +5,25 @@ import org.cefet.models.base.BaseModel;
 import java.util.HashMap;
 
 public class JogoModel extends BaseModel {
-    public String Nome;
-    public HashMap<String, Double> Odds;
+    private long JogoId;
+    private String Nome;
+    private HashMap<String, Double> Odds;
 
     public JogoModel() {
     }
 
-    public JogoModel(String nome, HashMap<String, Double> odds) {
+    public JogoModel(long jogoId, String nome, HashMap<String, Double> odds) {
+        JogoId = jogoId;
         Nome = nome;
         Odds = odds;
+    }
+
+    public long getJogoId() {
+        return JogoId;
+    }
+
+    public void setJogoId(long jogoId) {
+        JogoId = jogoId;
     }
 
     public String getNome() {
