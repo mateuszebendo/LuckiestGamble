@@ -10,6 +10,8 @@
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 
     <%-- Estilos CSS Comuns --%>
+    <link rel="stylesheet" href="${contextPath}/css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="${contextPath}/css/sideBar.css" type="text/css"/>
     <link rel="stylesheet" href="${contextPath}/webjars/bootstrap/5.3.2/css/bootstrap.min.css"/>
 </head>
 <body>

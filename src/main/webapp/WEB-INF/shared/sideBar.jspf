@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+
+<div class="side-bar">
+    <ul>
+        <li class="menu-item even-item">
+            <img src="${contextPath}/svgs/home.svg" alt="Home Icon" class="item-icon"/>
+            <p>Home</p>
+        </li>
+        <li class="menu-item odd-item">
+            <img src="${contextPath}/svgs/poker.svg" alt="Home Icon" class="item-icon"/>
+            <p>Jogos</p>
+        </li>
+        <li class="menu-item even-item">
+            <img src="${contextPath}/svgs/profile.svg" alt="Home Icon" class="item-icon"/>
+            <p>Perfil</p>
+        </li>
+        <li class="menu-item odd-item">
+            <img src="${contextPath}/svgs/exit.svg" alt="Home Icon" class="item-icon"/>
+            <p>Sair</p>
+        </li>
+    </ul>
+</div>
