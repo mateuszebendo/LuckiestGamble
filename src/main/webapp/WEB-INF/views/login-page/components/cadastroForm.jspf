@@ -36,14 +36,6 @@
                 <div class="invalid-feedback" id="erroSenha">
                 </div>
             </div>
-            <div class="form-floating mb-3">
-                <input name="confirmarSenha" type="password" class="form-control rounded-3" id="floatingPasswordConfirm" placeholder="Confirmar senha" required>
-                <label for="floatingPasswordConfirm">
-                    Confirmar senha
-                </label>
-                <div class="invalid-feedback" id="erroConfirmarSenha">
-                </div>
-            </div>
             <button id="btn-criar-conta" class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">
                 Criar conta
             </button>
