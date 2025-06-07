@@ -16,13 +16,11 @@ $(document).ready(function() {
         const $emailInput = $("#floatingInputEmail");
         const $aniversarioInput = $("#floatingInputDate");
         const $senhaInput = $("#floatingPassword");
-        const $confirmarSenhaInput = $("#floatingPasswordConfirm");
 
         const $erroNomeSpan = $("#erroNome");
         const $erroEmailSpan = $("#erroEmail");
         const $erroAniversarioSpan = $("#erroDataNascimento");
         const $erroSenhaSpan = $("#erroSenha");
-        const $erroConfirmarSenhaSpan = $("#erroConfirmarSenha");
 
         let isValid = true; // Flag geral de validação
 
@@ -30,13 +28,11 @@ $(document).ready(function() {
         $emailInput.removeClass('is-invalid is-valid');
         $aniversarioInput.removeClass('is-invalid is-valid');
         $senhaInput.removeClass('is-invalid is-valid');
-        $confirmarSenhaInput.removeClass('is-invalid is-valid');
 
         $erroNomeSpan.text('');
         $erroEmailSpan.text('');
         $erroAniversarioSpan.text('');
         $erroSenhaSpan.text('');
-        $erroConfirmarSenhaSpan.text('');
 
         if ($nomeInput.val().trim() === '') {
             $nomeInput.addClass('is-invalid');
@@ -100,22 +96,9 @@ $(document).ready(function() {
             $senhaInput.addClass('is-valid');
         }
 
-        if ($confirmarSenhaInput.val().trim() === '') {
-            $confirmarSenhaInput.addClass('is-invalid');
-            $erroConfirmarSenhaSpan.text('A confirmação de senha é obrigatória.');
-            isValid = false;
-        } else if ($senhaInput.val().trim() !== $confirmarSenhaInput.val().trim()) {
-            $confirmarSenhaInput.addClass('is-invalid');
-            $erroConfirmarSenhaSpan.text('As senhas não coincidem.');
-            isValid = false;
-        } else {
-            $confirmarSenhaInput.addClass('is-valid');
+        if (!isValid) {
+            event.preventDefault();
         }
-
-
-        // if (!isValid) {
-        //     event.preventDefault();
-        // }
     });
 
     function validarEmailFormato(email) {
