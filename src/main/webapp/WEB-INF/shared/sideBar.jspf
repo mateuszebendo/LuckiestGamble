@@ -7,7 +7,7 @@
             <img src="${contextPath}/svgs/home.svg" alt="Home Icon" class="item-icon"/>
             <p>Home</p>
         </li>
-        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/jogos';">
+        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/games';">
             <img src="${contextPath}/svgs/poker.svg" alt="Home Icon" class="item-icon"/>
             <p>Jogos</p>
         </li>

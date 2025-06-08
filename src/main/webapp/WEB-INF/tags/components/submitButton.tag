@@ -7,7 +7,7 @@
 <%@ attribute name="iconClass" type="java.lang.String" required="false" %>
 
 <button type="submit"
-        class="${customClass}"
+        class="custom-btn ${customClass}"
         id="${buttonId}"
         <c:if test="${not empty onClick}">onclick="${onClick}"</c:if>
         <c:if test="${disabled}">disabled</c:if>

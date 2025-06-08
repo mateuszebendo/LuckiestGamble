@@ -12,6 +12,7 @@ import org.cefet.utils.UserSession;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @WebServlet(name="PortalController", urlPatterns = { "/app/portal", "/app/portal/*"})
@@ -44,6 +45,8 @@ public class PortalController extends HttpServlet {
                 getProfilePage(request, response);
             } else if(action.equals("/logout")) {
                 doLogout(request, response);
+            } else if(action.equals("/games")) {
+                getGamesPage(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -54,6 +57,8 @@ public class PortalController extends HttpServlet {
                 getProfilePage(request, response);
             } else if(action.equals("/logout")) {
                 doLogout(request, response);
+            } else if(action.equals("/games")) {
+                getGamesPage(request, response);
             } else {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -84,6 +89,22 @@ public class PortalController extends HttpServlet {
         request.setAttribute("pageScripts", pageScripts);
 
         request.getRequestDispatcher("/WEB-INF/views/profile-page/profile.jsp").forward(request, response);
+    }
+
+    protected void getGamesPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<String> pageStyles = new ArrayList<>();
+        HashMap<String, String> games = new HashMap<>();
+
+        pageStyles.add("games");
+        pageStyles.add("sideBar");
+        request.setAttribute("pageStyles", pageStyles);
+
+        games.put("roleta", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+        games.put("blackjack", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+        games.put("dados", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+        request.setAttribute("games", games);
+
+        request.getRequestDispatcher("/WEB-INF/views/games-page/games.jsp").forward(request, response);
     }
 
     protected void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
