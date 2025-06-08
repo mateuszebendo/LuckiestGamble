@@ -1,0 +1,63 @@
+#canvas {
+    border: 5px solid #333;
+    border-radius: 50%; /* Torna a borda do canvas redonda */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
+}
+
+#spin {
+    background-color: #4CAF50; /* Um verde agradável */
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px; /* Botão mais arredondado */
+    font-size: 1.2em;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#spin:hover {
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+
+#spin:active {
+    transform: scale(0.98);
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #333;
+}
+
+#roleta-main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    padding-left: 6%;
+    gap: 2rem;
+}
+
+.roleta-sub-container {
+    width: 100%;
+    display: flex;
+    padding: 8%;
+    gap: 3rem;
+}
+
+#roleta-canvas {
+    width: 70%;
+    height: 80%;
+    background-color: #222222;
+    border-radius: 16px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    padding: 0 5rem;
+}

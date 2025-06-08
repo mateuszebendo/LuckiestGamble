@@ -2,11 +2,11 @@ package org.cefet.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpSession; // Importar HttpSession
+import jakarta.servlet.http.HttpSession;
+import org.cefet.controller.base.BaseController;
 import org.cefet.dtos.ResponseUsuarioDto;
 import org.cefet.utils.UserSession;
 
@@ -16,55 +16,25 @@ import java.util.HashMap;
 import java.util.List;
 
 @WebServlet(name="PortalController", urlPatterns = { "/app/portal", "/app/portal/*"})
-public class PortalController extends HttpServlet {
+public class PortalController extends BaseController {
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String httpMethod = request.getMethod();
-
-        String pathInfo = request.getPathInfo();
-        String action = (pathInfo == null || pathInfo.isEmpty()) ? "/home" : pathInfo;
-
-        ResponseUsuarioDto usuarioDto = UserSession.getUsuario(request, response);
-        request.setAttribute("usuarioRequest", usuarioDto);
-
-        if("GET".equalsIgnoreCase(httpMethod)){
-            if(action.equals("/home")){
+    protected void handleGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+        switch (action) {
+            case "/home":
                 getHomePage(request, response);
-            } else if(action.equals("/profile")) {
-                getProfilePage(request, response);
-            } else if(action.equals("/logout")) {
+                break;
+            case "/logout":
                 doLogout(request, response);
-            } else if(action.equals("/games")) {
-                getGamesPage(request, response);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
-        } else if("POST".equalsIgnoreCase(httpMethod)) {
-            if(action.equals("/home")){
-                getHomePage(request, response);
-            } else if(action.equals("/profile")) {
+                break;
+            case "/profile":
                 getProfilePage(request, response);
-            } else if(action.equals("/logout")) {
-                doLogout(request, response);
-            } else if(action.equals("/games")) {
+                break;
+            case "/games":
                 getGamesPage(request, response);
-            } else {
+                break;
+            default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
@@ -108,13 +78,11 @@ public class PortalController extends HttpServlet {
     }
 
     protected void doLogout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Invalida a sessão
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.invalidate(); // Isso remove todos os atributos da sessão, incluindo "currentUser"
+            session.invalidate();
         }
 
-        // Remove o cookie de autenticação
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {

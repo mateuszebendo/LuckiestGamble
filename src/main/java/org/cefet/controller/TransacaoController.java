@@ -2,9 +2,9 @@ package org.cefet.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.cefet.controller.base.BaseController;
 import org.cefet.dtos.CreateTransacaoDto;
 import org.cefet.dtos.ResponseTransacaoDto;
 import org.cefet.dtos.ResponseUsuarioDto;
@@ -14,7 +14,7 @@ import org.cefet.utils.UserSession;
 import java.io.IOException;
 
 @WebServlet(name="TransacaoController", urlPatterns = { "/app/transacao", "/app/transacao/*"})
-public class TransacaoController extends HttpServlet {
+public class TransacaoController extends BaseController {
 
     private TransacaoService transacaoService;
 
@@ -24,28 +24,21 @@ public class TransacaoController extends HttpServlet {
         try {
             this.transacaoService = new TransacaoService();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to initialize TransacaoService", e);
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String httpMethod = request.getMethod();
-        String pathInfo = request.getPathInfo();
-        String action = (pathInfo == null || pathInfo.isEmpty()) ? "/" : pathInfo;
-
-        UserSession.getUsuario(request, response);
-
-        if(httpMethod.equals("POST")) {
-            if(action.equals("/deposito")) {
+    protected void handlePostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+        switch (action) {
+            case "/deposito":
                 depositInAccount(request, response);
-            } else if(action.equals("/saque")) {
+                break;
+            case "/saque":
                 withdrawalCash(request, response);
-            }
+                break;
+            default:
+                super.handlePostRequest(request, response, action);
         }
     }
 
@@ -62,9 +55,8 @@ public class TransacaoController extends HttpServlet {
             UserSession.setUsuario(request, responseTransacaoDto.getResponseUsuario());
             request.setAttribute("transacaoResponse", responseTransacaoDto);
             request.setAttribute("message", "Depósito efetuado com sucesso!");
-        } catch (Exception e)
-        {
-            request.setAttribute("message", "Erro ao efetuar o deposito: " + e.getMessage());
+        } catch (Exception e) {
+            request.setAttribute("message", "Erro ao efetuar o depósito: " + e.getMessage());
         }
         request.getRequestDispatcher("/app/portal/profile").forward(request, response);
     }
@@ -82,8 +74,7 @@ public class TransacaoController extends HttpServlet {
             UserSession.setUsuario(request, responseTransacaoDto.getResponseUsuario());
             request.setAttribute("transacaoResponse", responseTransacaoDto);
             request.setAttribute("message", "Saque efetuado com sucesso!");
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             request.setAttribute("message", "Erro ao efetuar o saque: " + e.getMessage());
         }
         request.getRequestDispatcher("/app/portal/profile").forward(request, response);

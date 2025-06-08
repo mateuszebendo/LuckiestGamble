@@ -2,7 +2,10 @@ package org.cefet.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+import org.cefet.controller.base.BaseController;
 import org.cefet.dtos.CreateUsuarioDto;
 import org.cefet.dtos.LoginUsuarioDto;
 import org.cefet.dtos.ResponseUsuarioDto;
@@ -16,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @WebServlet(name="UserController", urlPatterns = { "/app/usuario", "/app/usuario/*"})
-public class UserController extends HttpServlet {
+public class UserController extends BaseController {
 
     private UsuarioService usuarioService;
 
@@ -31,36 +34,41 @@ public class UserController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
-    }
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String httpMethod = request.getMethod();
-
         String pathInfo = request.getPathInfo();
         String action = (pathInfo == null || pathInfo.isEmpty()) ? "/login" : pathInfo;
 
-        if("GET".equalsIgnoreCase(httpMethod)){
-            if(action.equals("/login")) {
-                sendLoginPage(request, response, null);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
-        } else if("POST".equalsIgnoreCase(httpMethod)){
-            if(action.equals("/cadastro")){
-                createNewAccount(request, response);
-            } else if(action.equals("/entrar")) {
-                signIn(request, response);
-            }  else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-            }
+        if ("GET".equalsIgnoreCase(httpMethod)) {
+            handleGetRequest(request, response, action);
+        } else if ("POST".equalsIgnoreCase(httpMethod)) {
+            handlePostRequest(request, response, action);
+        } else if ("PUT".equalsIgnoreCase(httpMethod)) {
+            handlePutRequest(request, response, action);
+        } else if ("DELETE".equalsIgnoreCase(httpMethod)) {
+            handleDeleteRequest(request, response, action);
+        } else {
+            response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Método HTTP não permitido.");
+        }
+    }
+
+    @Override
+    protected void handleGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+        if (action.equals("/login")) {
+            sendLoginPage(request, response, null);
+        } else {
+            super.handleGetRequest(request, response, action);
+        }
+    }
+
+    @Override
+    protected void handlePostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+        if (action.equals("/cadastro")) {
+            createNewAccount(request, response);
+        } else if (action.equals("/entrar")) {
+            signIn(request, response);
+        } else {
+            super.handlePostRequest(request, response, action);
         }
     }
 
@@ -77,7 +85,7 @@ public class UserController extends HttpServlet {
             Cookie userCookie = new Cookie("loggedInUser", usuarioResponse.getNome() + ":" + usuarioResponse.getTipoUsuario().toString());
             userCookie.setMaxAge(60 * 30);
             userCookie.setPath("/");
-            userCookie.setHttpOnly(true); // Previne acesso via JavaScript
+            userCookie.setHttpOnly(true);
             response.addCookie(userCookie);
 
             response.sendRedirect(request.getContextPath() + "/app/portal/home");
