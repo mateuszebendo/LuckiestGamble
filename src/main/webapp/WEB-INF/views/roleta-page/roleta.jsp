@@ -14,7 +14,7 @@
                     <my-c:dinamicSelect id="bet-type-select-container" selectId="bet-type-select" name="apostas" options="${roleta.odds.keySet()}" label="Aposta: "/>
                     <my-c:dinamicApostaGroup/>
                     <button id="spin">GIRAR</button>
-                    <div id="result"></div>
+                    <div id="result" style="display: none"></div>
                 </div>
             </div>
         </div>
@@ -207,7 +207,7 @@
                 var spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
                 startAngle += (spinAngle * Math.PI / 180); // Atualiza o ângulo de início da roleta, fazendo-a girar.
                 drawRouletteWheel(); // Redesenha a roleta com o novo ângulo, criando a ilusão de movimento.
-                spinTimeout = setTimeout('rotateWheel()', 30); // Agenda a próxima chamada de `rotateWheel()` após 30ms.
+                spinTimeout = setTimeout(rotateWheel, 30); // Agenda a próxima chamada de `rotateWheel()` após 30ms.
             }
 
             // ---
@@ -260,6 +260,11 @@
 
             // Desenha a roleta pela primeira vez ao carregar a página, garantindo que ela seja visível imediatamente.
             drawRouletteWheel();
+
+            // Adiciona um event listener para o clique no botão de girar
+            $('#spin').click(function(){
+                spin();
+            });
         });
     </script>
 </my-l:_baseLayout>
