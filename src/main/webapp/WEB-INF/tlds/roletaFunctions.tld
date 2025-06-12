@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <display-name>Roleta Functions</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>rol</short-name>
+    <uri>/WEB-INF/tlds/roletaFunctions</uri>
+
+    <function>
+        <name>getSplitCombinations</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getSplitCombinations()</function-signature>
+    </function>
+
+    <function>
+        <name>getStreetCombinations</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getStreetCombinations()</function-signature>
+    </function>
+
+    <function>
+        <name>getCornerCombinations</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getCornerCombinations()</function-signature>
+    </function>
+
+    <function>
+        <name>getSixLineCombinations</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getSixLineCombinations()</function-signature>
+    </function>
+
+    <function>
+        <name>getDozens</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getDozens()</function-signature>
+    </function>
+
+    <function>
+        <name>getColumns</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getColumns()</function-signature>
+    </function>
+
+    <function>
+        <name>getHighLow</name>
+        <function-class>org.cefet.utils.RoletaCombinacoes</function-class>
+        <function-signature>java.util.List getHighLow()</function-signature>
+    </function>
+
+</taglib>

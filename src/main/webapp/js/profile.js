@@ -1,26 +1,17 @@
-$(document).ready(function() {
-    $("#btn-depositar").click(function (event) {
-        event.preventDefault();
-        let currentAction = $("#profile-saldo-form").attr("action");
-        if (!currentAction.endsWith('/')) {
-            currentAction += '/';
-        }
-        let newAction = currentAction + "app/transacao/deposito";
+$("#btn-depositar").click(function (event) {
+    event.preventDefault();
 
-        $("#profile-saldo-form").attr("action", newAction);
-        $("#profile-saldo-form").submit();
-    });
+    let newAction = CONTEXT_PATH + "/app/transacao/deposito";
 
-    $("#btn-sacar").click(function (event) {
-        event.preventDefault();
+    $("#profile-saldo-form").attr("action", newAction);
+    $("#profile-saldo-form").submit();
+});
 
-        let currentAction = $("#profile-saldo-form").attr("action");
-        if (!currentAction.endsWith('/')) {
-            currentAction += '/';
-        }
-        let newAction = currentAction + "app/transacao/saque";
+$("#btn-sacar").click(function (event) {
+    event.preventDefault();
 
-        $("#profile-saldo-form").attr("action", newAction);
-        $("#profile-saldo-form").submit();
-    });
+    let newAction = CONTEXT_PATH + "/app/transacao/saque";
+
+    $("#profile-saldo-form").attr("action", newAction);
+    $("#profile-saldo-form").submit();
 });

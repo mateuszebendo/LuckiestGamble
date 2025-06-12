@@ -31,23 +31,24 @@ public class TransacaoService {
         long usuarioId = createTransacaoDto.getUsuarioId();
 
         try {
-            Optional<UsuarioModel> usuarioOptional = usuarioDAO.findById(usuarioId);
-            if (usuarioOptional.isEmpty()) {
-                throw new IllegalArgumentException("Usuário não encontrado.");
-            }
-            UsuarioModel usuarioModel = usuarioOptional.get();
-
             createTransacaoDto.setTipoTransacao(TipoTransacao.DEPOSITO);
             createTransacaoDto.setStatus(StatusTransacao.CONCLUIDO);
             createTransacaoDto.setDescricao("Depósito de " + valor + " realizado com sucesso.");
 
             TransacaoModel transacaoTemporaria = new TransacaoModel(createTransacaoDto);
             transacaoTemporaria = transacaoDAO.save(transacaoTemporaria);
-            transacaoTemporaria.setUsuario(usuarioModel);
             transacaoFinal = transacaoTemporaria;
 
             usuarioDAO.changeSaldo(valor, usuarioId);
 
+            Optional<UsuarioModel> usuarioOptional = usuarioDAO.findById(usuarioId);
+
+            if (usuarioOptional.isEmpty()) {
+                throw new IllegalArgumentException("Usuário não encontrado.");
+            }
+
+            UsuarioModel usuarioModel = usuarioOptional.get();
+            transacaoFinal.setUsuario(usuarioModel);
         } catch (SQLException e) {
             throw new SQLException("Erro de banco de dados durante o depósito: " + e.getMessage(), e);
         } catch (IllegalArgumentException e) {

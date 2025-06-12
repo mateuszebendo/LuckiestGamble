@@ -29,6 +29,7 @@ public class TransacaoModel extends BaseModel {
         Descricao = transacao.getDescricao();
         Status = transacao.getStatus();
         UsuarioId = transacao.getUsuarioId();
+        DataHora = new Date();
     }
 
     public TransacaoModel(long transacaoId, TipoTransacao tipoTransacao, Double valor, Date dataHora, String descricao, StatusTransacao status, Date dataCriacao, Date dataAtualizacao, long usuarioId, UsuarioModel usuario) {

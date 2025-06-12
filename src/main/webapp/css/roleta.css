@@ -44,13 +44,13 @@
 .roleta-sub-container {
     width: 100%;
     display: flex;
-    padding: 8%;
-    gap: 3rem;
+    justify-content: center;
+    align-items: center;
 }
 
 #roleta-canvas {
-    width: 70%;
-    height: 80%;
+    max-width: 100%;
+    max-height: 100%;
     background-color: #222222;
     border-radius: 16px;
     color: #ffffff;
@@ -60,4 +60,17 @@
     text-align: center;
     flex-direction: column;
     padding: 0 5rem;
+}
+
+#roleta-options-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.dinamic-hidden-input {
+    display: none;
 }

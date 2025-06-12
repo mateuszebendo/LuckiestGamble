@@ -30,15 +30,10 @@ public class TransacaoController extends BaseController {
 
     @Override
     protected void handlePostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
-        switch (action) {
-            case "/deposito":
-                depositInAccount(request, response);
-                break;
-            case "/saque":
-                withdrawalCash(request, response);
-                break;
-            default:
-                super.handlePostRequest(request, response, action);
+        if(action.contains("/deposito")){
+            depositInAccount(request, response);
+        } else if(action.contains("/saque")){
+            withdrawalCash(request, response);
         }
     }
 

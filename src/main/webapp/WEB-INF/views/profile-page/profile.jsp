@@ -13,7 +13,7 @@
         <my-c:textField id="tipoUsuario" name="tipoUsuario" label="Cargo" type="text" value="${usuarioRequest.tipoUsuario}" inputClass="default-input" readonly="${true}"/>
         <my-c:textField id="birthday" name="birthday" label="Data de Nascimento" type="text" value="${usuarioRequest.dataNascimento}" inputClass="default-input" readonly="${true}"/>
       </my-l:defaultForm>
-      <my-l:defaultForm endpoint="" method="post" title="Saldo - R$${usuarioRequest.saldo}" formId="profile-saldo-form" message="${message}">
+      <my-l:defaultForm endpoint="app/transacao/saque" method="post" title="Saldo - R$${usuarioRequest.saldo}" formId="profile-saldo-form" message="${message}">
         <my-c:textField id="newAmount" name="newAmount" label="Depósito" type="number" inputClass="default-input"/>
         <my-c:submitButton buttonId="btn-depositar" text="Depositar" customClass="custom-btn button-primary"/>
         <hr id="profile-saldo-hr"/>
@@ -22,4 +22,7 @@
       </my-l:defaultForm>
     </div>
   </main>
+  <script>
+    const CONTEXT_PATH = "${pageContext.request.contextPath}";
+  </script>
 </my-l:_baseLayout>

@@ -18,8 +18,7 @@ import java.util.List;
 @WebServlet(name="PortalController", urlPatterns = { "/app/portal", "/app/portal/*"})
 public class PortalController extends BaseController {
 
-    @Override
-    protected void handleGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+    private void handleGenericRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
         switch (action) {
             case "/home":
                 getHomePage(request, response);
@@ -36,6 +35,16 @@ public class PortalController extends BaseController {
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    @Override
+    protected void handleGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+        handleGenericRequest(request, response, action);
+    }
+
+    @Override
+    protected void handlePostRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
+        handleGenericRequest(request, response, action);
     }
 
     protected void getHomePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,8 +79,8 @@ public class PortalController extends BaseController {
         request.setAttribute("pageStyles", pageStyles);
 
         games.put("roleta", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
-        games.put("blackjack", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
-        games.put("dados", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+//        games.put("blackjack", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+//        games.put("dados", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
         request.setAttribute("games", games);
 
         request.getRequestDispatcher("/WEB-INF/views/games-page/games.jsp").forward(request, response);

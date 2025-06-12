@@ -117,3 +117,66 @@ body {
     transform: translateY(0);
     box-shadow: 0 4px 8px rgba(71, 71, 71, 0.2);
 }
+
+.dynamic-select {
+    width: 100%;
+    padding: 12px 10px;
+    margin-bottom: 25px;
+    border: none;
+    font-size: 1rem;
+    color: #333;
+    background-color: #ffffff;
+    border-radius: 10px;
+    transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    outline: none;
+
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23333333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>'); /* Adiciona uma seta personalizada */
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.dynamic-select:focus {
+    border-bottom: 2px solid #d41818;
+    box-shadow: 0 2px 5px rgba(212, 24, 24, 0.4);
+}
+
+.dynamic-option {
+    padding: 10px;
+    background-color: #ffffff;
+    color: #333;
+    font-size: 1rem;
+    border: none;
+    outline: none;
+    transition: background-color 0.2s ease;
+}
+
+.dynamic-option:checked {
+    background-color: #e0e0e0;
+    color: #333;
+    font-weight: bold;
+}
+
+.dynamic-option:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.dynamic-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+    color: #555;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease-in-out;
+}
+
+.dynamic-input-group:focus-within .dynamic-label {
+    color: #d41818;
+}
