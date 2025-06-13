@@ -22,6 +22,7 @@
            name="${name}"
            value="${value}"
            placeholder="${placeholder}"
+           id="${id}-input"
            <c:if test="${required}">required</c:if>
            <c:if test="${readonly}">readonly</c:if>
            <c:if test="${min}">min="${min}" </c:if>

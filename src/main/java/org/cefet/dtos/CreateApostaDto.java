@@ -1,12 +1,8 @@
-package org.cefet.models;
-
-import org.cefet.dtos.CreateApostaDto;
-import org.cefet.models.base.BaseModel;
+package org.cefet.dtos;
 
 import java.util.Date;
 
-public class ApostaModel extends BaseModel {
-    private long ApostaId;
+public class CreateApostaDto {
     private double Valor;
     private Date DataAposta;
     private String Resultado;
@@ -14,26 +10,16 @@ public class ApostaModel extends BaseModel {
     private long UsuarioId;
     private long JogoId;
 
-    private UsuarioModel Usuario;
-    private JogoModel Jogo;
-
-    public ApostaModel() {}
-
-    public ApostaModel(CreateApostaDto aposta) {
-        Valor = aposta.getValor();
-        DataAposta = aposta.getDataAposta();
-        Resultado = aposta.getResultado();
-        TipoAposta = aposta.getTipoAposta();
-        UsuarioId = aposta.getUsuarioId();
-        JogoId = aposta.getJogoId();
+    public CreateApostaDto() {
     }
 
-    public long getApostaId() {
-        return ApostaId;
-    }
-
-    public void setApostaId(long apostaId) {
-        ApostaId = apostaId;
+    public CreateApostaDto(double valor, String resultado, String tipoAposta, long usuarioId, long jogoId) {
+        Valor = valor;
+        DataAposta = new Date();
+        Resultado = resultado;
+        TipoAposta = tipoAposta;
+        UsuarioId = usuarioId;
+        JogoId = jogoId;
     }
 
     public double getValor() {
@@ -82,21 +68,5 @@ public class ApostaModel extends BaseModel {
 
     public void setJogoId(long jogoId) {
         JogoId = jogoId;
-    }
-
-    public UsuarioModel getUsuario() {
-        return Usuario;
-    }
-
-    public void setUsuario(UsuarioModel usuario) {
-        Usuario = usuario;
-    }
-
-    public JogoModel getJogo() {
-        return Jogo;
-    }
-
-    public void setJogo(JogoModel jogo) {
-        Jogo = jogo;
     }
 }

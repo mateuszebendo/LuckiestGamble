@@ -10,48 +10,82 @@ import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
 public class UsuarioService {
 
     private UsuarioDAO usuarioDAO;
 
     public UsuarioService() throws SQLException {
-        usuarioDAO = new UsuarioDAO(ConnectionFactory.getConnection());
+        try {
+            usuarioDAO = new UsuarioDAO(ConnectionFactory.getConnection());
+        } catch (SQLException e) {
+            throw new SQLException("Erro ao conectar ao banco de dados para o serviço de usuário.", e);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro inesperado na inicialização do serviço de usuário.", e);
+        }
     }
 
-    public ResponseUsuarioDto saveUsuario (CreateUsuarioDto dto) throws Exception {
-        UsuarioModel usuario = new UsuarioModel();
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setSenha(dto.getSenha());
-        usuario.setDataNascimento(dto.getDataNascimento());
-        usuario.setSaldo(0);
-        usuario.setTipoUsuario(TipoUsuario.COMUM);
+    public ResponseUsuarioDto saveUsuario(CreateUsuarioDto dto) throws Exception {
+        try {
+            UsuarioModel usuario = new UsuarioModel();
+            usuario.setNome(dto.getNome());
+            usuario.setEmail(dto.getEmail());
+            usuario.setSenha(dto.getSenha());
+            usuario.setDataNascimento(dto.getDataNascimento());
+            usuario.setSaldo(0);
+            usuario.setTipoUsuario(TipoUsuario.COMUM);
 
-        var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
-
-        return usuarioResponse;
+            var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
+            return usuarioResponse;
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao salvar usuário: " + e.getMessage());
+            throw new SQLException("Erro de banco de dados ao criar a conta.", e);
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao salvar usuário: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao criar a conta.", e);
+        }
     }
 
-    public ResponseUsuarioDto login(LoginUsuarioDto usuario) throws Exception {
-        UsuarioModel usuarioModel = usuarioDAO.login(usuario.getUsuario(), usuario.getSenha());
+    public ResponseUsuarioDto login(LoginUsuarioDto dto) throws Exception {
+        try {
+            UsuarioModel usuarioModel = usuarioDAO.login(dto.getUsuario(), dto.getSenha());
 
-        return new ResponseUsuarioDto(usuarioModel);
+            if (usuarioModel == null) {
+                throw new NoSuchElementException("Usuário ou senha inválidos.");
+            }
+
+            return new ResponseUsuarioDto(usuarioModel);
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados no login: " + e.getMessage());
+            throw new SQLException("Erro de banco de dados ao tentar logar.", e);
+        } catch (NoSuchElementException e) {
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro inesperado no login: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao tentar logar.", e);
+        }
     }
 
-    public ResponseUsuarioDto updateUsuario (UpdateUsuarioDto dto) throws Exception {
-        UsuarioModel usuario = new UsuarioModel();
-        usuario.setUsuarioId(dto.getUsuarioId());
-        usuario.setNome(dto.getNome());
-        usuario.setEmail(dto.getEmail());
-        usuario.setSenha(dto.getSenha());
-        usuario.setDataNascimento(dto.getDataNascimento());
-        usuario.setSaldo(dto.getSaldo());
-        usuario.setTipoUsuario(dto.getTipoUsuario());
+    public ResponseUsuarioDto updateUsuario(UpdateUsuarioDto dto) throws Exception {
+        try {
+            UsuarioModel usuario = new UsuarioModel();
+            usuario.setUsuarioId(dto.getUsuarioId());
+            usuario.setNome(dto.getNome());
+            usuario.setEmail(dto.getEmail());
+            usuario.setSenha(dto.getSenha());
+            usuario.setDataNascimento(dto.getDataNascimento());
+            usuario.setSaldo(dto.getSaldo());
+            usuario.setTipoUsuario(dto.getTipoUsuario());
 
-        var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
-
-        return usuarioResponse;
+            var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
+            return usuarioResponse;
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao atualizar usuário: " + e.getMessage());
+            throw new SQLException("Erro de banco de dados ao atualizar as informações do usuário.", e);
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao atualizar usuário: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao atualizar as informações do usuário.", e);
+        }
     }
-
 }

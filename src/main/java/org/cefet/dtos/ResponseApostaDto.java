@@ -1,11 +1,12 @@
-package org.cefet.models;
+package org.cefet.dtos;
 
-import org.cefet.dtos.CreateApostaDto;
-import org.cefet.models.base.BaseModel;
+import org.cefet.models.ApostaModel;
+import org.cefet.models.JogoModel;
+import org.cefet.models.UsuarioModel;
 
 import java.util.Date;
 
-public class ApostaModel extends BaseModel {
+public class ResponseApostaDto {
     private long ApostaId;
     private double Valor;
     private Date DataAposta;
@@ -17,15 +18,18 @@ public class ApostaModel extends BaseModel {
     private UsuarioModel Usuario;
     private JogoModel Jogo;
 
-    public ApostaModel() {}
+    public ResponseApostaDto() {}
 
-    public ApostaModel(CreateApostaDto aposta) {
+    public ResponseApostaDto(ApostaModel aposta) {
+        ApostaId = aposta.getApostaId();
         Valor = aposta.getValor();
         DataAposta = aposta.getDataAposta();
         Resultado = aposta.getResultado();
         TipoAposta = aposta.getTipoAposta();
         UsuarioId = aposta.getUsuarioId();
         JogoId = aposta.getJogoId();
+        Usuario = aposta.getUsuario();
+        Jogo = aposta.getJogo();
     }
 
     public long getApostaId() {

@@ -46,6 +46,7 @@ public class GamesController extends BaseController {
         request.setAttribute("pageStyles", pageStyles);
 
         pageScripts.add("roleta");
+        pageScripts.add("roletaAnimacao");
         request.setAttribute("pageScripts", pageScripts);
 
         try {
