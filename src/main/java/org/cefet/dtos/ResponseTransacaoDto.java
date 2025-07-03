@@ -32,7 +32,11 @@ public class ResponseTransacaoDto {
         DataCriacao = transacaoModel.getDataCriacao();
         DataAtualizacao = transacaoModel.getDataAtualizacao();
         UsuarioId = transacaoModel.getUsuarioId();
-        ResponseUsuario = new ResponseUsuarioDto(transacaoModel.getUsuario());
+        if (transacaoModel.getUsuario() != null) {
+            this.ResponseUsuario = new ResponseUsuarioDto(transacaoModel.getUsuario());
+        } else {
+            this.ResponseUsuario = null;
+        }
     }
 
     public Long getTransacaoId() {

@@ -7,7 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 import org.cefet.controller.base.BaseController;
+import org.cefet.dtos.CreateApostaDto;
+import org.cefet.dtos.ResponseApostaDto;
+import org.cefet.dtos.ResponseTransacaoDto;
 import org.cefet.dtos.ResponseUsuarioDto;
+import org.cefet.services.TransacaoService;
 import org.cefet.utils.UserSession;
 
 import java.io.IOException;
@@ -17,6 +21,18 @@ import java.util.List;
 
 @WebServlet(name="PortalController", urlPatterns = { "/app/portal", "/app/portal/*"})
 public class PortalController extends BaseController {
+
+    private TransacaoService transacaoService;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        try {
+            this.transacaoService = new TransacaoService();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize TransacaoService", e);
+        }
+    }
 
     private void handleGenericRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
         switch (action) {
@@ -30,6 +46,12 @@ public class PortalController extends BaseController {
                 getProfilePage(request, response);
                 break;
             case "/games":
+                getGamesPage(request, response);
+                break;
+            case "/projeto_um":
+                getProjectOnePage(request, response);
+                break;
+            case "/projeto_dois":
                 getGamesPage(request, response);
                 break;
             default:
@@ -106,5 +128,26 @@ public class PortalController extends BaseController {
         }
 
         response.sendRedirect(request.getContextPath() + "/app/usuario/login");
+    }
+
+    protected void getProjectOnePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<String> pageStyles = new ArrayList<>();
+        pageStyles.add("project-one");
+        pageStyles.add("sideBar");
+        request.setAttribute("pageStyles", pageStyles);
+
+        ResponseUsuarioDto currentUser = UserSession.getUsuario(request, response);
+        try {
+            List<ResponseTransacaoDto> transacaoList = transacaoService.getAllTransacaoByUser(currentUser.getUsuarioId());
+            request.setAttribute("transacaoList", transacaoList);
+        } catch (RuntimeException e) {
+            System.err.println("Erro ao carregar histórico de transações: " + e.getMessage());
+            request.setAttribute("message", "Erro ao carregar histórico de transações: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Erro inesperado no controller ao carregar histórico: " + e.getMessage());
+            request.setAttribute("message", "Ocorreu um erro inesperado.");
+        }
+
+        request.getRequestDispatcher("/WEB-INF/views/project-one-page/project_one.jsp").forward(request, response);
     }
 }

@@ -15,6 +15,14 @@
             <img src="${contextPath}/svgs/profile.svg" alt="Home Icon" class="item-icon"/>
             <p>Perfil</p>
         </li>
+        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/projeto_um';">
+            <img src="${contextPath}/svgs/one.svg" alt="Home Icon" class="item-icon"/>
+            <p>P1</p>
+        </li>
+        <li class="menu-item even-item" onclick="window.location.href = '${contextPath}/app/portal/projeto_dois';">
+            <img src="${contextPath}/svgs/two.svg" alt="Home Icon" class="item-icon"/>
+            <p>P2</p>
+        </li>
         <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/logout';">
             <img src="${contextPath}/svgs/exit.svg" alt="Home Icon" class="item-icon"/>
             <p>Sair</p>

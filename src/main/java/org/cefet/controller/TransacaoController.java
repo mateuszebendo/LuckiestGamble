@@ -34,6 +34,8 @@ public class TransacaoController extends BaseController {
             depositInAccount(request, response);
         } else if(action.contains("/saque")){
             withdrawalCash(request, response);
+        } else if(action.contains("/deletar")){
+            deleteTransaction(request, response);
         }
     }
 
@@ -73,5 +75,17 @@ public class TransacaoController extends BaseController {
             request.setAttribute("message", "Erro ao efetuar o saque: " + e.getMessage());
         }
         request.getRequestDispatcher("/app/portal/profile").forward(request, response);
+    }
+
+    private void deleteTransaction(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        long transacaoId = Long.parseLong(request.getParameter("transacaoId"));
+
+        try {
+            transacaoService.deleteTransaction(transacaoId);
+            request.setAttribute("message", "Transação removida com sucesso!");
+        } catch (Exception e) {
+            request.setAttribute("message", "Erro ao deletar transação: " + e.getMessage());
+        }
+        request.getRequestDispatcher("/app/portal/projeto_um").forward(request, response);
     }
 }
