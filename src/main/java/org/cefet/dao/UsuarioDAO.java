@@ -6,6 +6,7 @@ import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.sql.*;
+import java.util.Optional;
 
 public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implements BaseRepository<UsuarioModel, Long> {
 
@@ -52,6 +53,21 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         }
 
         return usuario;
+    }
+
+    public Optional<UsuarioModel> findByNome(String nome) throws SQLException {
+        String sql = "SELECT usuario_id, nome, email, senha, data_nascimento, saldo, tipo_usuario, data_criacao, data_atualizacao FROM usuarios WHERE nome = ?";
+        UsuarioModel usuario = null; // Inicializa como null
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nome);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    usuario = mapResultSetToObject(rs);
+                }
+            }
+        }
+        // Retorna um Optional.of(usuario) se encontrado, ou Optional.empty() se null
+        return Optional.ofNullable(usuario); // Usa ofNullable para lidar com 'usuario' sendo null
     }
 
     @Override

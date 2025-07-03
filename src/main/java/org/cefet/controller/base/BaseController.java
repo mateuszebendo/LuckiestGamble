@@ -34,10 +34,31 @@ public abstract class BaseController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         String httpMethod = request.getMethod();
         String pathInfo = request.getPathInfo();
-        String action = (pathInfo == null || pathInfo.isEmpty()) ? "/home" : pathInfo;
+        String action = (pathInfo == null || pathInfo.isEmpty()) ? "/" : pathInfo;
 
-        ResponseUsuarioDto usuarioDto = UserSession.getUsuario(request, response);
-        request.setAttribute("usuarioRequest", usuarioDto);
+        String fullRequestURI = request.getRequestURI();
+        String contextPath = request.getContextPath();
+
+        boolean isPublicPath = fullRequestURI.startsWith(contextPath + "/app/usuario/login") ||
+                fullRequestURI.startsWith(contextPath + "/app/usuario/cadastro") ||
+                fullRequestURI.startsWith(contextPath + "/app/usuario/criarJson");
+
+        ResponseUsuarioDto usuarioDto = null;
+        usuarioDto = UserSession.getUsuario(request, response);
+
+        if (usuarioDto == null && !isPublicPath) {
+            response.sendRedirect(request.getContextPath() + "/app/usuario/login");
+            return;
+        }
+
+        if (usuarioDto != null && (fullRequestURI.startsWith(contextPath + "/app/usuario/login") || fullRequestURI.startsWith(contextPath + "/app/usuario/cadastro"))) {
+            response.sendRedirect(request.getContextPath() + "/app/portal/home");
+            return;
+        }
+
+        if (usuarioDto != null) {
+            request.setAttribute("usuarioRequest", usuarioDto);
+        }
 
         if ("GET".equalsIgnoreCase(httpMethod)) {
             handleGetRequest(request, response, action);

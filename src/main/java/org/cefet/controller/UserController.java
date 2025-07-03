@@ -88,6 +88,7 @@ public class UserController extends BaseController {
     private void signIn(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String nome = request.getParameter("username");
         String senha = request.getParameter("password");
+        String selectedColor = request.getParameter("color");
 
         LoginUsuarioDto loginUsuarioDto = new LoginUsuarioDto(nome, senha);
 
@@ -101,10 +102,18 @@ public class UserController extends BaseController {
             userCookie.setHttpOnly(true);
             response.addCookie(userCookie);
 
+            if (selectedColor != null && !selectedColor.isEmpty()) {
+                Cookie colorPreferenceCookie = new Cookie("userColorPreference", selectedColor);
+                colorPreferenceCookie.setMaxAge(60 * 60 * 24 * 30);
+                colorPreferenceCookie.setPath("/");
+                response.addCookie(colorPreferenceCookie);
+            }
+
             response.sendRedirect(request.getContextPath() + "/app/portal/home");
 
         } catch (Exception e) {
-            sendLoginPage(request, response, e.getMessage());
+            request.setAttribute("message", e.getMessage());
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
         }
     }
 
@@ -128,7 +137,7 @@ public class UserController extends BaseController {
     }
 
     private void createNewAccountFromJson(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("application/json"); // Define o tipo de resposta como JSON
+        response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -170,11 +179,18 @@ public class UserController extends BaseController {
     private void sendLoginPage(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
         List<String> pageScripts = new ArrayList<>();
         List<String> pageStyles = new ArrayList<>();
+        List<String> colorsOptions = new ArrayList<>();
+
         pageScripts.add("login");
         pageStyles.add("login");
 
+        colorsOptions.add("Red");
+        colorsOptions.add("Green");
+        colorsOptions.add("Blue");
+
         request.setAttribute("pageScripts", pageScripts);
         request.setAttribute("pageStyles", pageStyles);
+        request.setAttribute("colorsOptions", colorsOptions);
         request.setAttribute("message", message);
 
         request.getRequestDispatcher("/login.jsp").forward(request, response);

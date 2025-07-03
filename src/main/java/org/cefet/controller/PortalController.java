@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 import org.cefet.controller.base.BaseController;
-import org.cefet.dtos.CreateApostaDto;
-import org.cefet.dtos.ResponseApostaDto;
 import org.cefet.dtos.ResponseTransacaoDto;
 import org.cefet.dtos.ResponseUsuarioDto;
 import org.cefet.services.TransacaoService;
@@ -158,11 +156,25 @@ public class PortalController extends BaseController {
         pageStyles.add("project-two");
         pageStyles.add("sideBar");
 
-        pageScripts.add("project-two");
+        pageScripts.add("projectTwo");
 
         request.setAttribute("pageStyles", pageStyles);
-        request.setAttribute("pageScripts", pageStyles);
+        request.setAttribute("pageScripts", pageScripts);
 
-        request.getRequestDispatcher("/WEB-INF/views/project-one-page/project_two.jsp").forward(request, response);
+        String userColorPreference = null;
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("userColorPreference".equals(cookie.getName())) {
+                    userColorPreference = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        request.setAttribute("userColorPreference", userColorPreference);
+
+        request.getRequestDispatcher("/WEB-INF/views/project-two-page/project_two.jsp").forward(request, response);
     }
 }

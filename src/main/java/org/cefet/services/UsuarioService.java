@@ -12,6 +12,7 @@ import org.cefet.models.UsuarioModel;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class UsuarioService {
@@ -104,6 +105,22 @@ public class UsuarioService {
         } catch (Exception e) {
             System.err.println("Erro inesperado ao buscar todos os usuários: " + e.getMessage());
             throw new RuntimeException("Ocorreu um erro inesperado ao carregar a lista de usuários.", e);
+        }
+    }
+
+    public UsuarioModel getUsuarioByNome(String nomeUsuario) throws Exception {
+        try {
+            Optional<UsuarioModel> usuarioOptional = usuarioDAO.findByNome(nomeUsuario);
+
+            return usuarioOptional.orElseThrow(() -> new NoSuchElementException("Usuário não encontrado com o nome: " + nomeUsuario));
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao buscar usuário por nome: " + e.getMessage());
+            throw new SQLException("Erro de banco de dados ao validar o usuário pelo nome.", e);
+        } catch (NoSuchElementException e) {
+            throw e;
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao buscar usuário por nome: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao buscar o usuário pelo nome.", e);
         }
     }
 }
