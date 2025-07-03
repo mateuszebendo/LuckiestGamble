@@ -10,7 +10,9 @@ import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 public class UsuarioService {
 
@@ -86,6 +88,22 @@ public class UsuarioService {
         } catch (Exception e) {
             System.err.println("Erro inesperado ao atualizar usuário: " + e.getMessage());
             throw new RuntimeException("Ocorreu um erro inesperado ao atualizar as informações do usuário.", e);
+        }
+    }
+
+    public List<ResponseUsuarioDto> getUsuarios() throws RuntimeException { // Pode lançar RuntimeException
+        try {
+            List<UsuarioModel> usuariosModel = usuarioDAO.findAll(); // Chama o método findAll do DAO
+
+            return usuariosModel.stream()
+                    .map(ResponseUsuarioDto::new)
+                    .collect(Collectors.toList());
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao buscar todos os usuários: " + e.getMessage());
+            throw new RuntimeException("Erro ao carregar a lista de usuários.", e);
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao buscar todos os usuários: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao carregar a lista de usuários.", e);
         }
     }
 }

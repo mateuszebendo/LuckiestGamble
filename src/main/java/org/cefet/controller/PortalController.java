@@ -52,7 +52,7 @@ public class PortalController extends BaseController {
                 getProjectOnePage(request, response);
                 break;
             case "/projeto_dois":
-                getGamesPage(request, response);
+                getProjectTwoPage(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -149,5 +149,20 @@ public class PortalController extends BaseController {
         }
 
         request.getRequestDispatcher("/WEB-INF/views/project-one-page/project_one.jsp").forward(request, response);
+    }
+
+    protected void getProjectTwoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<String> pageStyles = new ArrayList<>();
+        List<String> pageScripts = new ArrayList<>();
+
+        pageStyles.add("project-two");
+        pageStyles.add("sideBar");
+
+        pageScripts.add("project-two");
+
+        request.setAttribute("pageStyles", pageStyles);
+        request.setAttribute("pageScripts", pageStyles);
+
+        request.getRequestDispatcher("/WEB-INF/views/project-one-page/project_two.jsp").forward(request, response);
     }
 }

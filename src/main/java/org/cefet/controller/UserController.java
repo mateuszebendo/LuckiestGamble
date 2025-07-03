@@ -1,5 +1,7 @@
 package org.cefet.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +14,10 @@ import org.cefet.dtos.ResponseUsuarioDto;
 import org.cefet.services.UsuarioService;
 import org.cefet.utils.UserSession;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,14 +27,18 @@ import java.util.List;
 public class UserController extends BaseController {
 
     private UsuarioService usuarioService;
+    private Gson gson;
 
     @Override
     public void init() throws ServletException {
         super.init();
         try {
             this.usuarioService = new UsuarioService();
+            this.gson = new Gson();
+        } catch (SQLException e) {
+            throw new ServletException("Erro ao inicializar UsuarioService: problema de SQL.", e);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Erro inesperado na inicialização do UsuarioService.", e);
         }
     }
 
@@ -56,6 +65,8 @@ public class UserController extends BaseController {
     protected void handleGetRequest(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
         if (action.equals("/login")) {
             sendLoginPage(request, response, null);
+        } else if (action.equals("/recuperar-usuarios")) {
+            getAllUsers(request, response);
         } else {
             super.handleGetRequest(request, response, action);
         }
@@ -67,6 +78,8 @@ public class UserController extends BaseController {
             createNewAccount(request, response);
         } else if (action.equals("/entrar")) {
             signIn(request, response);
+        } else if (action.equals("/novo-usuario")) {
+            createNewAccountFromJson(request, response);
         } else {
             super.handlePostRequest(request, response, action);
         }
@@ -114,6 +127,46 @@ public class UserController extends BaseController {
         }
     }
 
+    private void createNewAccountFromJson(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json"); // Define o tipo de resposta como JSON
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        try (BufferedReader reader = request.getReader()) {
+            CreateUsuarioDto createUsuarioDto = gson.fromJson(reader, CreateUsuarioDto.class);
+
+            if (createUsuarioDto == null || createUsuarioDto.getNome() == null || createUsuarioDto.getNome().isEmpty() ||
+                    createUsuarioDto.getEmail() == null || createUsuarioDto.getEmail().isEmpty() ||
+                    createUsuarioDto.getSenha() == null || createUsuarioDto.getSenha().isEmpty() ||
+                    createUsuarioDto.getDataNascimento() == null) {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Status 400
+                out.print("{\"message\": \"Dados de usuário incompletos ou inválidos.\"}");
+                out.flush();
+                return;
+            }
+            usuarioService.saveUsuario(createUsuarioDto);
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            out.print("{\"message\": \"Usuário criado com sucesso via JSON!\"}");
+            out.flush();
+
+        } catch (JsonSyntaxException e) {
+            System.err.println("Erro de sintaxe JSON ao criar usuário: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Status 400
+            out.print("{\"message\": \"Requisição inválida: JSON malformado.\"}");
+            out.flush();
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao criar usuário via JSON: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"message\": \"Erro ao salvar usuário no banco de dados: " + e.getMessage() + "\"}");
+            out.flush();
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao criar usuário via JSON: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"message\": \"Ocorreu um erro inesperado ao criar o usuário.\"}");
+            out.flush();
+        }
+    }
+
     private void sendLoginPage(HttpServletRequest request, HttpServletResponse response, String message) throws ServletException, IOException {
         List<String> pageScripts = new ArrayList<>();
         List<String> pageStyles = new ArrayList<>();
@@ -125,5 +178,37 @@ public class UserController extends BaseController {
         request.setAttribute("message", message);
 
         request.getRequestDispatcher("/login.jsp").forward(request, response);
+    }
+
+    protected void getAllUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<ResponseUsuarioDto> listaUsuarios = null;
+
+        try {
+            listaUsuarios = usuarioService.getUsuarios();
+            String json = gson.toJson(listaUsuarios);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+
+            PrintWriter out = response.getWriter();
+            out.print(json);
+            out.flush();
+        } catch (RuntimeException e) {
+            System.err.println("Erro ao carregar lista de usuários para JSON: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print("{\"error\": \"Erro ao carregar a lista de usuários: " + e.getMessage() + "\"}");
+            out.flush();
+        } catch (Exception e) {
+            System.err.println("Erro inesperado no controller ao gerar JSON de usuários: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            PrintWriter out = response.getWriter();
+            out.print("{\"error\": \"Ocorreu um erro inesperado ao carregar os usuários.\"}");
+            out.flush();
+        }
     }
 }
