@@ -6,8 +6,10 @@ $(document).ready(function() {
             Nome: $("#username-input").val(),
             Email: $("#email-input").val(),
             DataNascimento: $("#birthday-input").val(),
+            TipoUsuario: $("#user-type-select").val().toUpperCase(),
             Senha: $("#password-input").val()
         };
+
         $.ajax({
             url: $(this).attr("action"),
             type: $(this).attr("method"),
@@ -75,6 +77,7 @@ $(document).ready(function() {
                                 <td>${user.Nome}</td>
                                 <td>${user.Email}</td>
                                 <td>${user.DataNascimento}</td>
+                                <td>${user.TipoUsuario}</td>
                             </tr>
                         `;
                         tableBody.append(row);

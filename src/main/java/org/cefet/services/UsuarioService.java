@@ -37,7 +37,7 @@ public class UsuarioService {
             usuario.setSenha(dto.getSenha());
             usuario.setDataNascimento(dto.getDataNascimento());
             usuario.setSaldo(0);
-            usuario.setTipoUsuario(TipoUsuario.COMUM);
+            usuario.setTipoUsuario(dto.getTipoUsuario());
 
             var usuarioResponse = new ResponseUsuarioDto(usuarioDAO.save(usuario));
             return usuarioResponse;

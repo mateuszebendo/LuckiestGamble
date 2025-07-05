@@ -147,6 +147,7 @@ public class UserController extends BaseController {
             if (createUsuarioDto == null || createUsuarioDto.getNome() == null || createUsuarioDto.getNome().isEmpty() ||
                     createUsuarioDto.getEmail() == null || createUsuarioDto.getEmail().isEmpty() ||
                     createUsuarioDto.getSenha() == null || createUsuarioDto.getSenha().isEmpty() ||
+                    createUsuarioDto.getTipoUsuario() == null ||
                     createUsuarioDto.getDataNascimento() == null) {
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Status 400
                 out.print("{\"message\": \"Dados de usuário incompletos ou inválidos.\"}");

@@ -13,6 +13,7 @@
             <my-c:textField id="usernameInput" name="usernameInput" label="Usuário" type="text"/>
             <my-c:textField id="emailInput" name="emailInput" label="Email" type="email"/>
             <my-c:textField id="dateInput" name="dateInput" label="Data de Nascimento" type="date"/>
+            <my-c:dinamicSelect id="userTypeSelect" selectId="user-type-select-filter" name="userTypeSelect" options="${['ADMIN', 'COMUM']}" label="Tipo"/>
             <my-c:submitButton buttonId="findUserButton" text="Filtrar" customClass="custom-btn button-primary" />
         </div>
     </div>
@@ -23,6 +24,7 @@
                 <th>Usuário</th>
                 <th>Email</th>
                 <th>Data de Nascimento</th>
+                <th>Tipo</th>
             </tr>
             </thead>
             <tbody>

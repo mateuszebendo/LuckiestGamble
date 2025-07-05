@@ -6,7 +6,10 @@
 <div class="user-manager-form-container">
     <my-l:defaultForm endpoint="app/usuario/novo-usuario" method="post" title="Criar novo usuário" formId="form-new-user" message="${message}">
         <my-c:textField id="username" name="username" label="Usuário" type="text" placeholder="Usuário" inputClass="default-input" required="${true}"/>
-        <my-c:textField id="email" name="email" label="Email" type="email" placeholder="Email" inputClass="default-input" required="${true}"/>
+        <div class="form-new-user-row">
+            <my-c:textField id="email" name="email" label="Email" type="email" placeholder="Email" inputClass="default-input" required="${true}"/>
+            <my-c:dinamicSelect id="userTypeSelect" selectId="user-type-select" name="userTypeSelect" options="${['ADMIN', 'COMUM']}" label="Tipo" required="${true}"/>
+        </div>
         <my-c:textField id="birthday" name="birthday" label="Data de Nascimento" type="date" inputClass="default-input" required="${true}"/>
         <my-c:textField id="password" name="password" label="Senha" type="password" placeholder="Senha" inputClass="default-input" required="${true}"/>
         <my-c:submitButton text="Criar usuário" customClass="custom-btn button-primary"/>
