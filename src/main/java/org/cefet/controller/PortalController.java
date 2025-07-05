@@ -46,9 +46,6 @@ public class PortalController extends BaseController {
             case "/games":
                 getGamesPage(request, response);
                 break;
-            case "/projeto_um":
-                getProjectOnePage(request, response);
-                break;
             case "/projeto_dois":
                 getProjectTwoPage(request, response);
                 break;
@@ -87,6 +84,18 @@ public class PortalController extends BaseController {
         pageScripts.add("profile");
         request.setAttribute("pageScripts", pageScripts);
 
+        ResponseUsuarioDto currentUser = UserSession.getUsuario(request, response);
+        try {
+            List<ResponseTransacaoDto> transacaoList = transacaoService.getAllTransacaoByUser(currentUser.getUsuarioId());
+            request.setAttribute("transacaoList", transacaoList);
+        } catch (RuntimeException e) {
+            System.err.println("Erro ao carregar histórico de transações: " + e.getMessage());
+            request.setAttribute("message", "Erro ao carregar histórico de transações: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Erro inesperado no controller ao carregar histórico: " + e.getMessage());
+            request.setAttribute("message", "Ocorreu um erro inesperado.");
+        }
+
         request.getRequestDispatcher("/WEB-INF/views/profile-page/profile.jsp").forward(request, response);
     }
 
@@ -99,8 +108,8 @@ public class PortalController extends BaseController {
         request.setAttribute("pageStyles", pageStyles);
 
         games.put("roleta", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
-        games.put("blackjack", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
-        games.put("dados", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+//        games.put("blackjack", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
+//        games.put("dados", "The Account SAS grants access to multiple storage services within a single Azure Storage account, including Blob, Queue, Table, and File Storage. This SAS type is useful when multiple services need to be accessed under a single SAS token, eliminating the need to generate multiple tokens for different services. Since it applies to the entire storage account, it offers broad access and should be used cautiously to limit exposure.");
         request.setAttribute("games", games);
 
         request.getRequestDispatcher("/WEB-INF/views/games-page/games.jsp").forward(request, response);
@@ -126,27 +135,6 @@ public class PortalController extends BaseController {
         }
 
         response.sendRedirect(request.getContextPath() + "/app/usuario/login");
-    }
-
-    protected void getProjectOnePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<String> pageStyles = new ArrayList<>();
-        pageStyles.add("project-one");
-        pageStyles.add("sideBar");
-        request.setAttribute("pageStyles", pageStyles);
-
-        ResponseUsuarioDto currentUser = UserSession.getUsuario(request, response);
-        try {
-            List<ResponseTransacaoDto> transacaoList = transacaoService.getAllTransacaoByUser(currentUser.getUsuarioId());
-            request.setAttribute("transacaoList", transacaoList);
-        } catch (RuntimeException e) {
-            System.err.println("Erro ao carregar histórico de transações: " + e.getMessage());
-            request.setAttribute("message", "Erro ao carregar histórico de transações: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("Erro inesperado no controller ao carregar histórico: " + e.getMessage());
-            request.setAttribute("message", "Ocorreu um erro inesperado.");
-        }
-
-        request.getRequestDispatcher("/WEB-INF/views/project-one-page/project_one.jsp").forward(request, response);
     }
 
     protected void getProjectTwoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
