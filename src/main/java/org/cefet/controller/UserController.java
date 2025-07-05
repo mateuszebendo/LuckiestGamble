@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 import org.cefet.controller.base.BaseController;
 import org.cefet.dtos.CreateUsuarioDto;
+import org.cefet.dtos.FindUsuarioDto;
 import org.cefet.dtos.LoginUsuarioDto;
 import org.cefet.dtos.ResponseUsuarioDto;
 import org.cefet.services.UsuarioService;
@@ -80,6 +81,8 @@ public class UserController extends BaseController {
             signIn(request, response);
         } else if (action.equals("/novo-usuario")) {
             createNewAccountFromJson(request, response);
+        } else if (action.equals("/recuperar-usuarios-filtrados")) {
+            findUsers(request, response);
         } else {
             super.handlePostRequest(request, response, action);
         }
@@ -225,6 +228,32 @@ public class UserController extends BaseController {
             response.setCharacterEncoding("UTF-8");
             PrintWriter out = response.getWriter();
             out.print("{\"error\": \"Ocorreu um erro inesperado ao carregar os usuários.\"}");
+            out.flush();
+        }
+    }
+
+    protected void findUsers(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        PrintWriter out = response.getWriter();
+
+        try (BufferedReader reader = request.getReader()) {
+            FindUsuarioDto findUsuarioDto = gson.fromJson(reader, FindUsuarioDto.class);
+
+            List<ResponseUsuarioDto> usuarioDtos = usuarioService.findUsuarios(findUsuarioDto);
+            String json = gson.toJson(usuarioDtos);
+            out.print(json);
+            out.flush();
+
+        } catch (JsonSyntaxException e) {
+            System.err.println("Erro de sintaxe JSON ao recuperar usuários: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Status 400
+            out.print("{\"message\": \"Requisição inválida: JSON malformado.\"}");
+            out.flush();
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao recuperar usuários via JSON: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"message\": \"Ocorreu um erro inesperado ao recuperar usuários.\"}");
             out.flush();
         }
     }

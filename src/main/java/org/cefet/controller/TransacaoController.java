@@ -86,6 +86,6 @@ public class TransacaoController extends BaseController {
         } catch (Exception e) {
             request.setAttribute("message", "Erro ao deletar transação: " + e.getMessage());
         }
-        request.getRequestDispatcher("/app/portal/projeto_um").forward(request, response);
+        request.getRequestDispatcher("/app/portal/profile").forward(request, response);
     }
 }

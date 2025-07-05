@@ -2,10 +2,7 @@ package org.cefet.services;
 
 import org.cefet.config.ConnectionFactory;
 import org.cefet.dao.UsuarioDAO;
-import org.cefet.dtos.CreateUsuarioDto;
-import org.cefet.dtos.LoginUsuarioDto;
-import org.cefet.dtos.ResponseUsuarioDto;
-import org.cefet.dtos.UpdateUsuarioDto;
+import org.cefet.dtos.*;
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
@@ -121,6 +118,22 @@ public class UsuarioService {
         } catch (Exception e) {
             System.err.println("Erro inesperado ao buscar usuário por nome: " + e.getMessage());
             throw new RuntimeException("Ocorreu um erro inesperado ao buscar o usuário pelo nome.", e);
+        }
+    }
+
+    public List<ResponseUsuarioDto> findUsuarios(FindUsuarioDto dto) throws RuntimeException {
+        try {
+            List<UsuarioModel> usuariosModel = usuarioDAO.findUsers(dto);
+
+            return usuariosModel.stream()
+                    .map(ResponseUsuarioDto::new)
+                    .collect(Collectors.toList());
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao buscar usuários: " + e.getMessage());
+            throw new RuntimeException("Erro ao carregar usuários com os critérios informados.", e);
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao buscar usuários: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao carregar usuários.", e);
         }
     }
 }
