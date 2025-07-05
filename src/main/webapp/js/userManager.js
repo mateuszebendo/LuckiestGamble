@@ -38,33 +38,25 @@ $(document).ready(function() {
 
     let usersTableLoaded = false;
 
-    $("#switch-project-two").click(function (event) {
+    $("#userManagerSwitchButton").click(function (event) {
         event.preventDefault();
 
-        const originalMain = $("#project-two-main-container.original");
-        const secondaryMain = $("#project-two-main-container.secondary");
+        const formContainer = $(".user-manager-form-container");
+        const tableContainer = $(".user-manager-table-container");
 
-        originalMain.toggle();
-        secondaryMain.toggle();
+        formContainer.toggle();
+        tableContainer.toggle();
 
-        if (secondaryMain.is(":visible") && !usersTableLoaded) {
+        if (tableContainer.is(":visible") && !usersTableLoaded) {
             loadUsersTable();
             usersTableLoaded = true;
+        } else {
+            usersTableLoaded = false;
         }
     });
 
-    $("#switch-project-two-secondary").click(function (event) {
-        event.preventDefault();
-
-        const originalMain = $("#project-two-main-container.original");
-        const secondaryMain = $("#project-two-main-container.secondary");
-
-        originalMain.toggle();
-        secondaryMain.toggle();
-    });
-
     function loadUsersTable() {
-        const tableBody = $("#project-two-main-container.secondary table tbody");
+        const tableBody = $(".table-scroll-container table tbody");
         tableBody.empty();
 
         tableBody.append('<tr><td colspan="3">Carregando usuários...</td></tr>');

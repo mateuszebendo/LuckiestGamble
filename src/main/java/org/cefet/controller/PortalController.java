@@ -46,8 +46,8 @@ public class PortalController extends BaseController {
             case "/games":
                 getGamesPage(request, response);
                 break;
-            case "/projeto_dois":
-                getProjectTwoPage(request, response);
+            case "/user_manager":
+                getUserManagerPage(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -137,14 +137,14 @@ public class PortalController extends BaseController {
         response.sendRedirect(request.getContextPath() + "/app/usuario/login");
     }
 
-    protected void getProjectTwoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void getUserManagerPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<String> pageStyles = new ArrayList<>();
         List<String> pageScripts = new ArrayList<>();
 
-        pageStyles.add("project-two");
+        pageStyles.add("user-manager");
         pageStyles.add("sideBar");
 
-        pageScripts.add("projectTwo");
+        pageScripts.add("userManager");
 
         request.setAttribute("pageStyles", pageStyles);
         request.setAttribute("pageScripts", pageScripts);
@@ -163,6 +163,6 @@ public class PortalController extends BaseController {
 
         request.setAttribute("userColorPreference", userColorPreference);
 
-        request.getRequestDispatcher("/WEB-INF/views/project-two-page/project_two.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/user-manager-page/user_manager.jsp").forward(request, response);
     }
 }

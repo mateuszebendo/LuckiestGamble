@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags/layouts" prefix="my-l"%>
+<%@ taglib tagdir="/WEB-INF/tags/components" prefix="my-c"%>
+
+<div class="user-manager-form-container">
+    <my-l:defaultForm endpoint="app/usuario/novo-usuario" method="post" title="Criar novo usuário" formId="form-new-user" message="${message}">
+        <my-c:textField id="username" name="username" label="Usuário" type="text" placeholder="Usuário" inputClass="default-input" required="${true}"/>
+        <my-c:textField id="email" name="email" label="Email" type="email" placeholder="Email" inputClass="default-input" required="${true}"/>
+        <my-c:textField id="birthday" name="birthday" label="Data de Nascimento" type="date" inputClass="default-input" required="${true}"/>
+        <my-c:textField id="password" name="password" label="Senha" type="password" placeholder="Senha" inputClass="default-input" required="${true}"/>
+        <my-c:submitButton text="Criar usuário" customClass="custom-btn button-primary"/>
+    </my-l:defaultForm>
+    <div class="user-manager-color-container">
+        <h1>Cor escolhida:</h1>
+        <div class="user-manager-color-square" style="background-color: ${userColorPreference}"></div>
+    </div>
+</div>

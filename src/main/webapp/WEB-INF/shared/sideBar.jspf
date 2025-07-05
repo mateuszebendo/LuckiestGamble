@@ -1,23 +1,48 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
+<c:if test="${not empty requestScope.usuarioRequest}">
+    <c:choose>
+        <c:when test="${requestScope.usuarioRequest.tipoUsuario == 'ADMIN'}">
+            <c:set var="itemClass" value="menu-item-admin"/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="itemClass" value="menu-item"/>
+        </c:otherwise>
+    </c:choose>
+</c:if>
+
 <div class="side-bar">
     <ul>
-        <li class="menu-item even-item" onclick="window.location.href = '${contextPath}/app/portal/home';">
+        <li class="${itemClass} even-item" onclick="window.location.href = '${contextPath}/app/portal/home';">
             <img src="${contextPath}/svgs/home.svg" alt="Home Icon" class="item-icon"/>
             <p>Home</p>
         </li>
-        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/games';">
-            <img src="${contextPath}/svgs/poker.svg" alt="Home Icon" class="item-icon"/>
+        <li class="${itemClass} odd-item" onclick="window.location.href = '${contextPath}/app/portal/games';">
+            <img src="${contextPath}/svgs/poker.svg" alt="Games Icon" class="item-icon"/>
             <p>Jogos</p>
         </li>
-        <li class="menu-item even-item" onclick="window.location.href = '${contextPath}/app/portal/profile';">
-            <img src="${contextPath}/svgs/profile.svg" alt="Home Icon" class="item-icon"/>
+        <li class="${itemClass} even-item" onclick="window.location.href = '${contextPath}/app/portal/profile';">
+            <img src="${contextPath}/svgs/profile.svg" alt="Profile Icon" class="item-icon"/>
             <p>Perfil</p>
         </li>
-        <li class="menu-item odd-item" onclick="window.location.href = '${contextPath}/app/portal/logout';">
-            <img src="${contextPath}/svgs/exit.svg" alt="Home Icon" class="item-icon"/>
-            <p>Sair</p>
-        </li>
+        <c:choose>
+            <c:when test="${not empty requestScope.usuarioRequest && requestScope.usuarioRequest.tipoUsuario == 'ADMIN'}">
+                <li class="${itemClass} odd-item" onclick="window.location.href = '${contextPath}/app/portal/user_manager';">
+                    <img src="${contextPath}/svgs/gear.svg" alt="User Manager Icon" class="item-icon"/>
+                    <p>Gerenciar Usuários</p>
+                </li>
+                <li class="${itemClass} even-item" onclick="window.location.href = '${contextPath}/app/portal/logout';">
+                    <img src="${contextPath}/svgs/exit.svg" alt="exit Icon" class="item-icon"/>
+                    <p>Sair</p>
+                </li>
+            </c:when>
+            <c:otherwise>
+                <li class="${itemClass} odd-item" onclick="window.location.href = '${contextPath}/app/portal/logout';">
+                    <img src="${contextPath}/svgs/exit.svg" alt="exit Icon" class="item-icon"/>
+                    <p>Sair</p>
+                </li>
+            </c:otherwise>
+        </c:choose>
     </ul>
 </div>
