@@ -63,13 +63,13 @@ $(document).ready(function() {
         const username = $("#usernameInput-input").val();
         const email = $("#emailInput-input").val();
         const birthday = $("#dateInput-input").val();
-        const userType = $("#user-type-select-filter").val();
+        const userType = $("#user-type-select-filter").val().toUpperCase();
 
         const userFilter = {
             Nome: username === '' ? null : username,
             Email: email === '' ? null : email,
-            TipoUsuario: birthday === '' ? null : birthday,
-            DataNascimento: userType === '' ? null : userType,
+            DataNascimento: birthday === '' ? null : birthday,
+            TipoUsuario: userType === '' ? null : userType,
         };
 
 
