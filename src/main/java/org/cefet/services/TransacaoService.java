@@ -5,6 +5,7 @@ import org.cefet.dao.TransacaoDAO;
 import org.cefet.dao.UsuarioDAO;
 import org.cefet.dtos.CreateTransacaoDto;
 import org.cefet.dtos.ResponseTransacaoDto;
+import org.cefet.dtos.ResponseUsuarioDto;
 import org.cefet.enums.StatusTransacao;
 import org.cefet.enums.TipoTransacao;
 import org.cefet.models.TransacaoModel;
@@ -12,7 +13,10 @@ import org.cefet.models.UsuarioModel;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class TransacaoService {
     private TransacaoDAO transacaoDAO;
@@ -25,29 +29,50 @@ public class TransacaoService {
         usuarioDAO = new UsuarioDAO(conexao);
     }
 
+    public List<ResponseTransacaoDto> getAllTransacaoByUser(long userId) {
+        try {
+            List<TransacaoModel> transacaoModels = transacaoDAO.getAllTransacaoByUserId(userId);
+
+            List<ResponseTransacaoDto> responseTransacaoDtoList = new ArrayList<>();
+
+            for (TransacaoModel transacaoModel : transacaoModels) {
+                responseTransacaoDtoList.add(new ResponseTransacaoDto(transacaoModel));
+            }
+
+            return responseTransacaoDtoList;
+        } catch (SQLException e) {
+            System.err.println("Erro de banco de dados ao buscar transações: " + e.getMessage());
+            throw new RuntimeException("Erro ao buscar histórico de transações.", e);
+        } catch (Exception e) {
+            System.err.println("Erro inesperado ao buscar transações: " + e.getMessage());
+            throw new RuntimeException("Ocorreu um erro inesperado ao buscar o histórico de transações.", e);
+        }
+    }
+
     public ResponseTransacaoDto deposit(CreateTransacaoDto createTransacaoDto) throws SQLException {
         TransacaoModel transacaoFinal = null;
         double valor = createTransacaoDto.getValor();
         long usuarioId = createTransacaoDto.getUsuarioId();
 
         try {
-            Optional<UsuarioModel> usuarioOptional = usuarioDAO.findById(usuarioId);
-            if (usuarioOptional.isEmpty()) {
-                throw new IllegalArgumentException("Usuário não encontrado.");
-            }
-            UsuarioModel usuarioModel = usuarioOptional.get();
-
             createTransacaoDto.setTipoTransacao(TipoTransacao.DEPOSITO);
             createTransacaoDto.setStatus(StatusTransacao.CONCLUIDO);
             createTransacaoDto.setDescricao("Depósito de " + valor + " realizado com sucesso.");
 
             TransacaoModel transacaoTemporaria = new TransacaoModel(createTransacaoDto);
             transacaoTemporaria = transacaoDAO.save(transacaoTemporaria);
-            transacaoTemporaria.setUsuario(usuarioModel);
             transacaoFinal = transacaoTemporaria;
 
             usuarioDAO.changeSaldo(valor, usuarioId);
 
+            Optional<UsuarioModel> usuarioOptional = usuarioDAO.findById(usuarioId);
+
+            if (usuarioOptional.isEmpty()) {
+                throw new IllegalArgumentException("Usuário não encontrado.");
+            }
+
+            UsuarioModel usuarioModel = usuarioOptional.get();
+            transacaoFinal.setUsuario(usuarioModel);
         } catch (SQLException e) {
             throw new SQLException("Erro de banco de dados durante o depósito: " + e.getMessage(), e);
         } catch (IllegalArgumentException e) {
@@ -134,5 +159,9 @@ public class TransacaoService {
         }
 
         return new ResponseTransacaoDto(transacaoFinal);
+    }
+
+    public void deleteTransaction(long transactionId) throws SQLException {
+        transacaoDAO.deleteById(transactionId);
     }
 }

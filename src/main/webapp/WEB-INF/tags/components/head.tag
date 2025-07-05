@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <title>${pageTitle}</title>
     <link rel="icon" href="${contextPath}/svgs/poker.svg" type="image/svg+xml">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 

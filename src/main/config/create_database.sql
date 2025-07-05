@@ -86,3 +86,19 @@ CREATE TABLE estatiscas_jogo (
     CONSTRAINT chk_lucro_casa CHECK (lucro_casa >= 0),
     CONSTRAINT chk_jogadores_ativos CHECK (jogadores_ativos >= 0)
 ) COMMENT='Estatísticas agregadas por jogo';
+
+INSERT INTO jogo (nome, odds) VALUES (
+     'Roleta Europeia',
+     '{
+       "aposta_direta": 35,
+       "split": 17,
+       "street": 11,
+       "corner": 8,
+       "six_line": 5,
+       "duzia": 2,
+       "coluna": 2,
+       "vermelho_preto": 1,
+       "par_impar": 1,
+       "alto_baixo": 1
+     }'
+ );

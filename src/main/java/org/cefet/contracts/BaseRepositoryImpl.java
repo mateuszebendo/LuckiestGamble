@@ -116,7 +116,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
 
     @Override
     public void deleteById(ID id) throws SQLException {
-        String sql = "DELETE FROM " + tableName + " WHERE " + idColumnName + " = ?";
+        String sql = "DELETE FROM " + tableName + " WHERE " + StringConverter.pascalToSnakeCase(idColumnName) + " = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, id);
             stmt.executeUpdate();

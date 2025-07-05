@@ -2,10 +2,15 @@ package org.cefet.dao;
 
 import org.cefet.contracts.BaseRepositoryImpl;
 import org.cefet.contracts.base.BaseRepository;
+import org.cefet.dtos.FindUsuarioDto;
+import org.cefet.dtos.ResponseUsuarioDto;
 import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implements BaseRepository<UsuarioModel, Long> {
 
@@ -52,6 +57,77 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         }
 
         return usuario;
+    }
+
+    public Optional<UsuarioModel> findByNome(String nome) throws SQLException {
+        String sql = "SELECT usuario_id, nome, email, senha, data_nascimento, saldo, tipo_usuario, data_criacao, data_atualizacao FROM usuarios WHERE nome = ?";
+        UsuarioModel usuario = null; // Inicializa como null
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, nome);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    usuario = mapResultSetToObject(rs);
+                }
+            }
+        }
+        // Retorna um Optional.of(usuario) se encontrado, ou Optional.empty() se null
+        return Optional.ofNullable(usuario); // Usa ofNullable para lidar com 'usuario' sendo null
+    }
+
+    public List<UsuarioModel> findUsers(FindUsuarioDto findUsuarioDto) throws SQLException {
+        StringBuilder sql = new StringBuilder("SELECT usuario_id, nome, email, senha, data_nascimento, saldo, tipo_usuario, data_criacao, data_atualizacao FROM usuarios WHERE 1=1"); // Inicia com WHERE 1=1 para facilitar a concatenação
+        List<UsuarioModel> usuarios = new ArrayList<>();
+
+        String nome = findUsuarioDto.getNome();
+        String email = findUsuarioDto.getEmail();
+        java.util.Date dataNascimento = findUsuarioDto.getDataNascimento();
+        TipoUsuario tipoUsuario = findUsuarioDto.getTipoUsuario();
+
+        if (nome != null && !nome.isEmpty()) {
+            sql.append(" AND nome LIKE ?");
+        }
+
+        if (email != null && !email.isEmpty()) {
+            sql.append(" AND email LIKE ?");
+        }
+
+        if (dataNascimento != null) {
+            sql.append(" AND data_nascimento = ?");
+        }
+
+        if (tipoUsuario != null) {
+            sql.append(" AND tipo_usuario = ?");
+        }
+
+        int index = 1;
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql.toString())) {
+            if (nome != null && !nome.isEmpty()) {
+                stmt.setString(index, "%" + nome + "%");
+                index++;
+            }
+
+            if (email != null && !email.isEmpty()) {
+                stmt.setString(index, "%" + email + "%");
+                index++;
+            }
+
+            if (dataNascimento != null) {
+                stmt.setTimestamp(index, new java.sql.Timestamp(dataNascimento.getTime()));
+                index++;
+            }
+
+            if (tipoUsuario != null) {
+                stmt.setString(index, tipoUsuario.toString());
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    usuarios.add(mapResultSetToObject(rs));
+                }
+            }
+        }
+        return usuarios;
     }
 
     @Override

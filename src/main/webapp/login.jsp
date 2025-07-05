@@ -11,6 +11,7 @@
         <my-l:defaultForm endpoint="app/usuario/entrar" method="post" title="Login" formId="form-login" message="${message}">
             <my-c:textField id="username" name="username" label="Usuário" type="text" placeholder="Digite seu usuário" inputClass="default-input"/>
             <my-c:textField id="password" name="password" label="Senha" type="password" placeholder="Digite sua senha" inputClass="default-input"/>
+            <my-c:dinamicSelect id="color-select-container" selectId="color-select" name="color" options="${colorsOptions}" label="Escolha uma cor: "/>
             <my-c:submitButton text="Entrar" customClass="custom-btn button-primary"/>
             <p id="login-text">Não possui conta?</p>
             <my-c:submitButton text="Cadastrar-se" buttonId="btn-cadastro" customClass="custom-btn button-secondary"/>

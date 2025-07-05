@@ -5,9 +5,10 @@
 <%@ attribute name="onClick" type="java.lang.String" required="false" %>
 <%@ attribute name="disabled" type="java.lang.Boolean" required="false" %>
 <%@ attribute name="iconClass" type="java.lang.String" required="false" %>
+<%@ attribute name="isNotSubmit" type="java.lang.Boolean" required="false" %>
 
-<button type="submit"
-        class="${customClass}"
+<button type="${not empty isNotSubmit ? "button" : "submit"}"
+        class="custom-btn ${customClass}"
         id="${buttonId}"
         <c:if test="${not empty onClick}">onclick="${onClick}"</c:if>
         <c:if test="${disabled}">disabled</c:if>

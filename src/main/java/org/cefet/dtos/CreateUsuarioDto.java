@@ -1,5 +1,6 @@
 package org.cefet.dtos;
 
+import org.cefet.enums.TipoUsuario;
 import org.cefet.models.UsuarioModel;
 
 import java.util.Date;
@@ -7,6 +8,7 @@ import java.util.Date;
 public class CreateUsuarioDto {
     private String Nome;
     private String Email;
+    private TipoUsuario TipoUsuario = org.cefet.enums.TipoUsuario.COMUM;
     private String Senha;
     private Date DataNascimento;
 
@@ -18,6 +20,14 @@ public class CreateUsuarioDto {
         Senha = senha;
         Email = email;
         Nome = nome;
+    }
+
+    public CreateUsuarioDto(String nome, String email, String senha, Date dataNascimento, org.cefet.enums.TipoUsuario tipoUsuario) {
+        DataNascimento = dataNascimento;
+        Senha = senha;
+        Email = email;
+        Nome = nome;
+        TipoUsuario = tipoUsuario;
     }
 
     public CreateUsuarioDto(UsuarioModel usuarioModel) {
@@ -57,5 +67,13 @@ public class CreateUsuarioDto {
 
     public void setDataNascimento(Date dataNascimento) {
         DataNascimento = dataNascimento;
+    }
+
+    public TipoUsuario getTipoUsuario() {
+        return TipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario) {
+        TipoUsuario = tipoUsuario;
     }
 }

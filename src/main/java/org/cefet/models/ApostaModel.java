@@ -1,5 +1,6 @@
 package org.cefet.models;
 
+import org.cefet.dtos.CreateApostaDto;
 import org.cefet.models.base.BaseModel;
 
 import java.util.Date;
@@ -18,16 +19,13 @@ public class ApostaModel extends BaseModel {
 
     public ApostaModel() {}
 
-    public ApostaModel(long apostaId, double valor, Date dataAposta, String resultado, String tipoAposta, long usuarioId, long jogoId, UsuarioModel usuario, JogoModel jogo) {
-        ApostaId = apostaId;
-        Valor = valor;
-        DataAposta = dataAposta;
-        Resultado = resultado;
-        TipoAposta = tipoAposta;
-        UsuarioId = usuarioId;
-        JogoId = jogoId;
-        Usuario = usuario;
-        Jogo = jogo;
+    public ApostaModel(CreateApostaDto aposta) {
+        Valor = aposta.getValor();
+        DataAposta = aposta.getDataAposta();
+        Resultado = aposta.getResultado();
+        TipoAposta = aposta.getTipoAposta();
+        UsuarioId = aposta.getUsuarioId();
+        JogoId = aposta.getJogoId();
     }
 
     public long getApostaId() {
