@@ -55,7 +55,7 @@ $(document).ready(function() {
         });
     }
 
-     validateResultado = (resultadoRoleta) => {
+    validateResultado = (resultadoRoleta) => {
         const tipoApostaSelecionado = $('#bet-type-select').val();
         const tipoApostaValue = betTypeMap[tipoApostaSelecionado];
         const $actualInputElement = findInputApostaDetalhe(tipoApostaSelecionado);
