@@ -70,4 +70,25 @@ public class EstatiscasJogoModel extends BaseModel {
     public void setJogo(JogoModel jogo) {
         Jogo = jogo;
     }
+
+    public void registrarNovaAposta(double valorApostado, double ganhoCasa, boolean jogadorNovo) {
+        this.TotalApostas++;
+        this.LucroCasa += ganhoCasa;
+
+
+        if (jogadorNovo) {
+            this.JogadoresAtivos++;
+        }
+    }
+
+    public double calcularLucroMedioPorAposta() {
+        if (this.TotalApostas == 0) {
+            return 0.0;
+        }
+        return this.LucroCasa / this.TotalApostas;
+    }
+
+    public void registrarNovoJogador() {
+        this.JogadoresAtivos++;
+    }
 }
