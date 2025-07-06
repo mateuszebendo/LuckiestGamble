@@ -61,9 +61,7 @@ public abstract class BaseRepositoryImpl <T extends BaseModel, ID extends Serial
 
                     try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
-                            if (idColumnName.equalsIgnoreCase("id")) {
-                                setIdValue(entity, (ID) (Object) generatedKeys.getLong(1));
-                            }
+                            setIdValue(entity, (ID) (Object) generatedKeys.getLong(1));
                         }
                     }
                 }

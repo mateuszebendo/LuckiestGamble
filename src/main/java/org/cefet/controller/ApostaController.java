@@ -43,12 +43,10 @@ public class ApostaController extends BaseController {
     }
 
     private void saveAposta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Configura a resposta como JSON
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        // 1. Ler o corpo da requisição (JSON)
         StringBuilder sb = new StringBuilder();
         BufferedReader reader = request.getReader();
         String line;
