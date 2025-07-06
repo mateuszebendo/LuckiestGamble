@@ -1,6 +1,6 @@
 $(document).ready(function() {
     const HIDE_CLASS = 'dinamic-hidden-input';
-    const betTypeSelect = $('#bet-type-select');
+
     const betTypeMap = {
         'aposta_direta': 'aposta_direta',
         'split': 'aposta_split',
@@ -13,69 +13,6 @@ $(document).ready(function() {
         'par_impar': 'aposta_par_impar',
         'vermelho_preto': 'aposta_vermelho_preto'
     };
-    const initialSelectedValue = betTypeSelect.val();
-
-    betTypeSelect.on('change', function() {
-        const selectedValue = $(this).val();
-        toggleBetInputs(selectedValue);
-    });
-
-    $('#btn-criar-aposta').click(function (){
-        const roletaMessage = $("#roleta-message");
-        roletaMessage.text("").hide();
-
-        const valorAposta = $('#valor-aposta-input').val();
-
-        if (!valorAposta || isNaN(valorAposta) || parseFloat(valorAposta) <= 0) {
-            roletaMessage.text("Por favor, insira um valor de aposta válido.").show();
-            return;
-        }
-
-        const valorApostaNum = parseFloat(valorAposta);
-
-        if(valorApostaNum > SALDO_USUARIO){
-            $("#roleta-message").text("Saldo insuficiente! Seu saldo atual: R$ " + SALDO_USUARIO.toFixed(2)).show();
-            return;
-        }
-
-        const tipoApostaSelecionado = $('#bet-type-select').val();
-        let valorApostaDetalhe = null;
-
-        if (tipoApostaSelecionado && betTypeMap[tipoApostaSelecionado]) {
-            const $actualInputElement = findInputApostaDetalhe(tipoApostaSelecionado);
-
-            if ($actualInputElement.length > 0) {
-                valorApostaDetalhe = $actualInputElement.val();
-                if (tipoApostaSelecionado === 'aposta_direta' && (!valorApostaDetalhe || isNaN(valorApostaDetalhe))) {
-                    roletaMessage.text("Por favor, escolha um número para a Aposta Direta.").show();
-                    return;
-                }
-                if (tipoApostaSelecionado !== 'aposta_direta' && !valorApostaDetalhe) {
-                    roletaMessage.text("Por favor, selecione uma opção para o tipo de aposta.").show();
-                    return;
-                }
-            } else {
-                roletaMessage.text("Erro interno: campo de aposta detalhada não encontrado.").show();
-                return;
-            }
-        } else {
-            roletaMessage.text("Por favor, selecione um tipo de aposta.").show();
-            return;
-        }
-
-        dadosParaServlet = {
-            valor: valorApostaNum,
-            resultado: "PENDENTE",
-            dataAposta: new Date(),
-            tipoAposta: tipoApostaSelecionado + (valorApostaDetalhe ? ": " + valorApostaDetalhe : ""),
-            jogoId: 1,
-            usuarioId: USUARIO_ID
-        };
-
-        $('#spin').removeClass(HIDE_CLASS);
-    });
-
-    toggleBetInputs(initialSelectedValue);
 
     function toggleBetInputs(selectedBetType) {
         $('.form-group').addClass(HIDE_CLASS);
@@ -89,7 +26,36 @@ $(document).ready(function() {
         }
     }
 
-     validateResultado = (resultadoRoleta) => {
+    function createAposta(){
+        $.ajax({
+            url: CONTEXT_PATH + '/app/aposta/roleta',
+            method: 'POST',
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(dadosParaServlet),
+            dataType: 'json',
+            beforeSend: function() {
+                $('#btn-criar-aposta').prop('disabled', true);
+                $('#spin').prop('disabled', true);
+                $("#roleta-message").text("Registrando aposta...").show();
+            },
+            success: function(response) {
+                if (response.status === 'sucesso') {
+                    $("#roleta-message").text("Aposta registrada! Saldo atualizado.").show();
+                } else {
+                    $("#roleta-message").text("Erro ao registrar aposta: " + response.mensagem).show();
+                    $('#btn-criar-aposta').prop('disabled', false);
+                    $('#spin').prop('disabled', false);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                $("#roleta-message").text("Erro de comunicação com o servidor.").show();
+                $('#btn-criar-aposta').prop('disabled', false);
+                $('#spin').prop('disabled', false);
+            }
+        });
+    }
+
+    validateResultado = (resultadoRoleta) => {
         const tipoApostaSelecionado = $('#bet-type-select').val();
         const tipoApostaValue = betTypeMap[tipoApostaSelecionado];
         const $actualInputElement = findInputApostaDetalhe(tipoApostaSelecionado);
@@ -217,7 +183,8 @@ $(document).ready(function() {
         return numerosColuna;
     }
 
-    function findInputApostaDetalhe(tipoApostaSelecionado) {
+    function findInputApostaDetalhe(tipoApostaSelecionado)
+    {
         const inputDetalheId = betTypeMap[tipoApostaSelecionado];
         const $inputDetalheElement = $('#' + inputDetalheId);
         let $actualInputElement = $inputDetalheElement.find('input, select').first();
@@ -229,32 +196,65 @@ $(document).ready(function() {
         return $actualInputElement;
     }
 
-    function createAposta(){
-        $.ajax({
-            url: CONTEXT_PATH + '/app/aposta/roleta',
-            method: 'POST',
-            contentType: 'application/json;charset=UTF-8',
-            data: JSON.stringify(dadosParaServlet),
-            dataType: 'json',
-            beforeSend: function() {
-                $('#btn-criar-aposta').prop('disabled', true);
-                $('#spin').prop('disabled', true);
-                $("#roleta-message").text("Registrando aposta...").show();
-            },
-            success: function(response) {
-                if (response.status === 'sucesso') {
-                    $("#roleta-message").text("Aposta registrada! Saldo atualizado.").show();
-                } else {
-                    $("#roleta-message").text("Erro ao registrar aposta: " + response.mensagem).show();
-                    $('#btn-criar-aposta').prop('disabled', false);
-                    $('#spin').prop('disabled', false);
+    $('#bet-type-select').on('change', function() {
+        const selectedValue = $(this).val();
+        toggleBetInputs(selectedValue);
+    });
+
+    const initialSelectedValue = $('#bet-type-select').val();
+    toggleBetInputs(initialSelectedValue);
+
+    $('#btn-criar-aposta').click(function (){
+        $("#roleta-message").text("").hide();
+
+        const valorAposta = $('#valor-aposta-input').val();
+
+        if (!valorAposta || isNaN(valorAposta) || parseFloat(valorAposta) <= 0) {
+            $("#roleta-message").text("Por favor, insira um valor de aposta válido.").show();
+            return;
+        }
+
+        const valorApostaNum = parseFloat(valorAposta);
+
+        if(valorApostaNum > SALDO_USUARIO){
+            $("#roleta-message").text("Saldo insuficiente! Seu saldo atual: R$ " + SALDO_USUARIO.toFixed(2)).show();
+            return;
+        }
+
+        const tipoApostaSelecionado = $('#bet-type-select').val();
+        let valorApostaDetalhe = null;
+
+        if (tipoApostaSelecionado && betTypeMap[tipoApostaSelecionado]) {
+            const $actualInputElement = findInputApostaDetalhe(tipoApostaSelecionado);
+
+            if ($actualInputElement.length > 0) {
+                valorApostaDetalhe = $actualInputElement.val();
+                if (tipoApostaSelecionado === 'aposta_direta' && (!valorApostaDetalhe || isNaN(valorApostaDetalhe))) {
+                    $("#roleta-message").text("Por favor, escolha um número para a Aposta Direta.").show();
+                    return;
                 }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                $("#roleta-message").text("Erro de comunicação com o servidor.").show();
-                $('#btn-criar-aposta').prop('disabled', false);
-                $('#spin').prop('disabled', false);
+                if (tipoApostaSelecionado !== 'aposta_direta' && !valorApostaDetalhe) {
+                    $("#roleta-message").text("Por favor, selecione uma opção para o tipo de aposta.").show();
+                    return;
+                }
+            } else {
+                $("#roleta-message").text("Erro interno: campo de aposta detalhada não encontrado.").show();
+                return;
             }
-        });
-    }
+        } else {
+            $("#roleta-message").text("Por favor, selecione um tipo de aposta.").show();
+            return;
+        }
+
+        dadosParaServlet = {
+            valor: valorApostaNum,
+            resultado: "PENDENTE",
+            dataAposta: new Date(),
+            tipoAposta: tipoApostaSelecionado + (valorApostaDetalhe ? ": " + valorApostaDetalhe : ""),
+            jogoId: 1,
+            usuarioId: USUARIO_ID
+        };
+
+        $('#spin').removeClass(HIDE_CLASS);
+    });
 });
