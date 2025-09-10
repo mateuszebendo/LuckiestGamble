@@ -140,7 +140,12 @@ public class UsuarioDAO extends BaseRepositoryImpl<UsuarioModel, Long> implement
         usuario.setSenha(rs.getString("senha"));
         usuario.setSaldo(rs.getDouble("saldo"));
         usuario.setDataNascimento(rs.getDate("data_nascimento"));
-        usuario.setTipoUsuario(TipoUsuario.valueOf(rs.getString("tipo_usuario")));
+        String tipoUsuarioStr = rs.getString("tipo_usuario");
+        if (tipoUsuarioStr != null) {
+            usuario.setTipoUsuario(TipoUsuario.valueOf(tipoUsuarioStr.toUpperCase()));
+        } else {
+            usuario.setTipoUsuario(TipoUsuario.COMUM);
+        }
 
         return usuario;
     }
